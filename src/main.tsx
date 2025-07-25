@@ -1,26 +1,39 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import Layout from './layout.tsx'
+import Layout from '@/layout'
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import BookPage from 'pages/client/book.tsx';
+import AboutPage from './pages/client/about.tsx';
+import LoginPage from './pages/client/auth/login.tsx';
+import RegisterPage from './pages/client/auth/register.tsx';
+import './style/global.scss'
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout/>,
+    element: <Layout />,
     children: [
       {
         path: "/book",
-        element: <div>Hello Book!</div>,
+        element: <BookPage />,
       },
       {
-        path: "/store",
-        element: <div>Heheh!</div>,
+        path: "/about",
+        element: <AboutPage />,
       },
     ]
   },
+  {
+    path: "/Login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+  }
 
 ]);
 
