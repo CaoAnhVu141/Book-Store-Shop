@@ -10,7 +10,7 @@ const RegisterPage = () => {
         password: string,
     }
 
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+    const onFinish: FormProps<IUserRegister>['onFinish'] = (values) => {
         console.log(values);
     };
 
@@ -31,6 +31,7 @@ const RegisterPage = () => {
                     boxShadow: "0 8px 24px rgba(0, 0, 0, 0.12)",
                     width: "100%",
                     maxWidth: "500px",
+                    maxHeight: "500px",
                     justifyContent: "center"
                 }}>
                     <Form
