@@ -10,6 +10,10 @@ import AboutPage from './pages/client/about.tsx';
 import LoginPage from './pages/client/auth/login.tsx';
 import RegisterPage from './pages/client/auth/register.tsx';
 import './style/global.scss'
+import ManagerUser from './pages/admin/manager.user.tsx';
+import { ProConfigProvider } from '@ant-design/pro-components';
+import enUS from 'antd/locale/en_US';
+import { ConfigProvider } from 'antd';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +28,10 @@ const router = createBrowserRouter([
         path: "/about",
         element: <AboutPage />,
       },
+      {
+        path: "/admin/user",
+        element: <ManagerUser />,
+      },
     ]
   },
   {
@@ -36,10 +44,12 @@ const router = createBrowserRouter([
   }
 
 ]);
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     {/* <Layout /> */}
-    <RouterProvider router={router} />
+    <ConfigProvider locale={enUS}>
+        <RouterProvider router={router} />
+    </ConfigProvider>
   </StrictMode>,
 )
+
