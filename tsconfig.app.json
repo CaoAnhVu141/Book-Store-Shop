@@ -13,6 +13,7 @@
       "components/*": ["./src/components/*"],
       "pages/*": ["./src/pages/*"],
       "style/*": ["./src/style/*"],
+      "services/*": ["./src/services/*"],
     },
 
     /* Bundler mode */

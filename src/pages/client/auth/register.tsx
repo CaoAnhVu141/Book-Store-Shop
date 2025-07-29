@@ -1,3 +1,4 @@
+import { loginAPI } from '@/services/api';
 import type { FormProps } from 'antd';
 import { Button, Checkbox, Form, Input } from 'antd';
 import React from 'react';
@@ -10,9 +11,14 @@ const RegisterPage = () => {
         password: string,
     }
 
-    const onFinish: FormProps<IUserRegister>['onFinish'] = (values) => {
+    const onFinish: FormProps<IUserRegister>['onFinish'] = async (values) => {
         console.log(values);
+
+        const response = await loginAPI("caovu5541@gmail.com","123456");
+        console.log("check response: ", response);
     };
+
+    console.log(import.meta.env.VITE_BACKEND_URL);
 
     return (
         <>
