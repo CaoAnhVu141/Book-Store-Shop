@@ -1,10 +1,14 @@
-import { loginAPI } from '@/services/api';
+import { loginAPI, registerAPI } from '@/services/api';
 import type { FormProps } from 'antd';
-import { Button, Checkbox, Form, Input } from 'antd';
-import React from 'react';
+import { Button, Checkbox, Form, Input, message } from 'antd';
+import React, { useState } from 'react';
+import { redirect, useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
 
+    const [isSubmit, setIsSubmit] = useState(false);
+    const [messageApi, contextHolder] = message.useMessage();
+    const navigate = useNavigate();
     interface IUserRegister {
         name: string,
         email: string,
@@ -12,16 +16,30 @@ const RegisterPage = () => {
     }
 
     const onFinish: FormProps<IUserRegister>['onFinish'] = async (values) => {
-        console.log(values);
-
-        const response = await loginAPI("caovu5541@gmail.com","1234567");
-        console.log("check response: ", response);
+        setIsSubmit(true);
+        const { name, email, password } = values;
+        console.log(email);
+        const response = await registerAPI(name, email, password);
+        if (response && response.data) {
+            messageApi.open({
+                type: 'success',
+                content: 'Đăng kí thành công',
+            });
+            setTimeout(() => {
+                navigate('/login')
+            }, 1500);
+        }
+        else {
+            messageApi.open({
+                type: 'error',
+                content: response?.message,
+            });
+        setIsSubmit(false); 
+        }
     };
-
-    console.log(import.meta.env.VITE_BACKEND_URL);
-
     return (
         <>
+            {contextHolder}
             <div className='all-form-register' style={{
                 display: "flex",
                 justifyContent: "center",
