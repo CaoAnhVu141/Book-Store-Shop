@@ -14,7 +14,7 @@ const RegisterPage = () => {
     const onFinish: FormProps<IUserRegister>['onFinish'] = async (values) => {
         console.log(values);
 
-        const response = await loginAPI("caovu5541@gmail.com","123456");
+        const response = await loginAPI("caovu5541@gmail.com","1234567");
         console.log("check response: ", response);
     };
 

@@ -17,4 +17,14 @@ declare global {
         },
         results: T[],
     }
+
+    // Định nghĩa một data type mới cho Login
+    interface ILogin {
+        access_token: string;
+        user: {
+            _id: string;
+            name: string;
+            email: string;
+        }
+    }
 }
