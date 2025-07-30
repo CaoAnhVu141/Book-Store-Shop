@@ -18,7 +18,6 @@ const RegisterPage = () => {
     const onFinish: FormProps<IUserRegister>['onFinish'] = async (values) => {
         setIsSubmit(true);
         const { name, email, password } = values;
-        console.log(email);
         const response = await registerAPI(name, email, password);
         if (response && response.data) {
             messageApi.open({
