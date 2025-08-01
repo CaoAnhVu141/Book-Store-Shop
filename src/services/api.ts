@@ -18,3 +18,8 @@ export const registerAPI = (name: string,email: string,password: string) => {
     }
     return axios.post(urlBackend,data);
 }
+
+export const fetchAccountAPI = () => {
+    const urlBackend = `/api/v1/auth/account`;
+    return axios.get<IBackendRes<IFetchAccount>>(urlBackend);
+}

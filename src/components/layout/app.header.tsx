@@ -5,7 +5,7 @@ const AppHeader = () => {
     return(
         <>
             <div>
-                {JSON.stringify(user?.name || null)}
+                {JSON.stringify(user?.role.name || null)}
             </div>
         </>
     )
