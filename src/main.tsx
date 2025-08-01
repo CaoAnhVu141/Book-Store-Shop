@@ -11,16 +11,19 @@ import LoginPage from 'pages/client/auth/login.tsx';
 import RegisterPage from 'pages/client/auth/register.tsx';
 import './style/global.scss'
 import enUS from 'antd/locale/en_US';
-import { ConfigProvider } from 'antd';
+import { App, ConfigProvider } from 'antd';
 import HomePage from 'pages/client/home.tsx';
+import { AppProvider } from 'components/context/app.context';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
     children: [
-      { index: true,
-        element: <HomePage /> },
+      {
+        index: true,
+        element: <HomePage />
+      },
       {
         path: "/book",
         element: <BookPage />,
@@ -44,9 +47,13 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     {/* <Layout /> */}
-    <ConfigProvider locale={enUS}>
-      <RouterProvider router={router} />
-    </ConfigProvider>
+    <App>
+      <ConfigProvider locale={enUS}>
+        <AppProvider>
+          <RouterProvider router={router} />
+        </AppProvider>
+      </ConfigProvider>
+    </App>
   </StrictMode>,
 )
 

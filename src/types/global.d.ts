@@ -25,6 +25,16 @@ declare global {
             _id: string;
             name: string;
             email: string;
+            role: string;
+            avatar: string;
         }
+    }
+
+    interface IUser {
+        _id: string;
+        name: string;
+        email: string;
+        role: string;
+        avatar: string;
     }
 }

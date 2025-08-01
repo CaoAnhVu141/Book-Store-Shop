@@ -4,6 +4,7 @@ import { Button, Checkbox, Form, Input, message } from 'antd';
 import React, { useState } from 'react';
 import { redirect, useNavigate } from 'react-router-dom';
 import './login.css'
+import { useCurrentApp } from '@/components/context/app.context';
 
 const LoginPage = () => {
 
@@ -14,12 +15,15 @@ const LoginPage = () => {
 
 
     const [messageApi, contextHolder] = message.useMessage();
+    const {setIsAuthenticated,setUser} = useCurrentApp();
     const navigate = useNavigate();
     const onFinish: FormProps<IUserLogin>['onFinish'] = async (values) => {
         const { email, password } = values
         const response = await loginAPI(email, password);
 
         if (response.data) {
+            setIsAuthenticated(true);
+            setUser(response.data.user)
             localStorage.setItem("access_token", response.data.access_token);
             messageApi.open({
                 type: 'success',
