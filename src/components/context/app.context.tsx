@@ -20,7 +20,7 @@ interface IProps {
 export const AppProvider = (props: IProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user,setUser] = useState<IUser| null>(null)
-  const [isLoadingApp, setIsLoadingApp] = useState<boolean>(false);
+  const [isLoadingApp, setIsLoadingApp] = useState<boolean>(true);
 
   return (
     <CurrentAppContext.Provider value={{ 
