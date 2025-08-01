@@ -57,6 +57,7 @@ const RegisterPage = () => {
                     maxHeight: "500px",
                     justifyContent: "center"
                 }}>
+                    <h3 className='title-register'>Đăng kí người dùng</h3>
                     <Form
                         name="basic"
                         labelCol={{ span: 8 }}

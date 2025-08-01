@@ -3,6 +3,7 @@ import type { FormProps } from 'antd';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import React, { useState } from 'react';
 import { redirect, useNavigate } from 'react-router-dom';
+import './login.css'
 
 const LoginPage = () => {
 
@@ -56,6 +57,7 @@ const LoginPage = () => {
                     maxHeight: "500px",
                     justifyContent: "center"
                 }}>
+                    <h3 className='title-login'>Đăng nhập</h3>
                     <Form
                         name="basic"
                         labelCol={{ span: 8 }}
@@ -88,7 +90,7 @@ const LoginPage = () => {
                             }} />
                         </Form.Item>
 
-                        <Form.Item label={null} style={{ display: "flex", justifyContent: "center", }}>
+                        <Form.Item label={null} style={{ display: "flex", justifyContent: "center", }} className='btn-login'>
                             <Button type="primary" htmlType="submit">
                                 Đăng nhập
                             </Button>
