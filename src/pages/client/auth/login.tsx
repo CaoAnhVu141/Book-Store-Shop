@@ -75,7 +75,7 @@ const LoginPage = () => {
                         <Form.Item<FieldType>
                             label="Email"
                             name="email"
-                            rules={[{ required: true, message: 'Please input your email!' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập email!' }]}
                         >
                             <Input style={{
                                 width: "250px",
@@ -86,7 +86,7 @@ const LoginPage = () => {
                         <Form.Item<FieldType>
                             label="Password"
                             name="password"
-                            rules={[{ required: true, message: 'Please input your password!' }]}
+                            rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
                         >
                             <Input.Password style={{
                                 width: "250px",

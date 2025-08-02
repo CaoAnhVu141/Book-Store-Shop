@@ -14,6 +14,7 @@ import enUS from 'antd/locale/en_US';
 import { App, ConfigProvider } from 'antd';
 import HomePage from 'pages/client/home.tsx';
 import { AppProvider } from 'components/context/app.context';
+import ProtectedRoute from 'components/auth';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,24 @@ const router = createBrowserRouter([
       {
         path: "/about",
         element: <AboutPage />,
+      },
+      {
+        path: "/checkout",
+        element: (
+          <ProtectedRoute>
+            <div>Trang checkout</div>
+          </ProtectedRoute>
+
+        ),
+      },
+      {
+        path: "/admin",
+        element: (
+          <ProtectedRoute>
+            <div>Trang Admin</div>
+          </ProtectedRoute>
+
+        ),
       }
     ]
   },

@@ -43,7 +43,7 @@ function Layout() {
             height={35}
             aria-label="Loading Spinner"
             data-testid="loader"
-            color='#7f1cd9'
+            color='#92A5FD'
             
           />
         </div>
