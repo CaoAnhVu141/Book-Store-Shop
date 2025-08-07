@@ -30,6 +30,12 @@ declare global {
         }
     }
 
+    interface IRegister {
+        _id: string;
+        email: string;
+        name: string;
+    }
+
     interface IUser {
         _id: string;
         name: string;
