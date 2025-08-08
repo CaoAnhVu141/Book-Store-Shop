@@ -45,8 +45,6 @@ const AppHeader = () => {
                 content: 'Đăng xuất thất bại',
             });
         }
-
-
     }
 
     let items = [

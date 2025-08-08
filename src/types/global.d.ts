@@ -15,7 +15,7 @@ declare global {
             pages: number;
             total: number;
         },
-        results: T[],
+        result: T[],
     }
 
     // Định nghĩa một data type mới cho Login
@@ -45,6 +45,8 @@ declare global {
             name: string,
         }
         avatar: string;
+        createdAt: Date;
+        updatedAt: Date;
     }
 
     interface IFetchAccount {
