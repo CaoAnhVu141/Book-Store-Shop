@@ -2,10 +2,11 @@ import { fetchListUser } from '@/services/api';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable, TableDropdown } from '@ant-design/pro-components';
-import { Button, Space, Tag } from 'antd';
+import { Button, DatePicker, Space, Tag } from 'antd';
 import { useRef, useState } from 'react';
 import './table.user.css';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 
 const columns: ProColumns<IModelPaginate>[] = [
@@ -31,10 +32,9 @@ const columns: ProColumns<IModelPaginate>[] = [
         title: 'Email',
         dataIndex: 'email',
         filters: true,
-        // onFilter: true,
+        onFilter: true,
         ellipsis: true,
         copyable: true,
-        valueType: 'select',
     },
     {
         disable: true,
@@ -51,15 +51,9 @@ const columns: ProColumns<IModelPaginate>[] = [
         title: 'Created At',
         dataIndex: 'createdAt',
         filters: true,
-        render: (record) => {
-            return (
-                <div>
-                    <p>{moment(record.createdAt).format("DD-MM-YYYY")}</p>
-                </div>
-            );
-        },
-        // onFilter: true,
-        valueType: 'select',
+        valueType: 'dateRange',
+        render: (_, record) => dayjs(record.createdAt).format('DD/MM/YYYY'),
+        renderFormItem: () => <DatePicker.RangePicker format="DD/MM/YYYY" />,
     },
     {
         disable: true,
@@ -92,10 +86,9 @@ const TableUser = () => {
                 actionRef={actionRef}
                 cardBordered
                 request={async (params, sort, filter) => {
-                    console.log("check current: ", params.current);
-                    console.log("check pageSize: ", params.pageSize);
+                    console.log("check filter: ", filter.email);
                     const response = await fetchListUser(params?.current ?? 1, params?.pageSize ?? 5);
-                    if(response.data){
+                    if (response.data) {
                         setMeta(response.data.meta);
                     }
                     return {
