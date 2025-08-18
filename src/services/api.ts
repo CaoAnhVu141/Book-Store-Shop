@@ -38,7 +38,7 @@ export const logoutAPI = () => {
 }
 
 
-export const fetchListUser = (current: number, pageSize: number) =>  {
-    const urlBackend = `api/v1/users?current=${current}&pageSize=${pageSize}`;
+export const fetchListUser = (query: string) =>  {
+    const urlBackend = `api/v1/users?${query}`;
     return axios.get<IBackendRes<IModelPaginate<IUser>>>(urlBackend);
 }

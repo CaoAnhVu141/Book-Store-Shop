@@ -35,6 +35,7 @@ const columns: ProColumns<IModelPaginate>[] = [
         onFilter: true,
         ellipsis: true,
         copyable: true,
+        search: true,
     },
     {
         disable: true,
@@ -44,7 +45,7 @@ const columns: ProColumns<IModelPaginate>[] = [
         onFilter: true,
         ellipsis: true,
         copyable: true,
-        valueType: 'select',
+        search: true,
     },
     {
         disable: true,
@@ -79,15 +80,31 @@ const TableUser = () => {
         pages: 0,
         total: 0,
     });  // quản lý pagination
+
+    type TSearch =  {
+        name: string,
+        email: string,
+    };
     return (
         <>
-            <ProTable<IModelPaginate>
+            <ProTable<IModelPaginate, TSearch>
                 columns={columns}
                 actionRef={actionRef}
                 cardBordered
                 request={async (params, sort, filter) => {
-                    console.log("check filter: ", filter.email);
-                    const response = await fetchListUser(params?.current ?? 1, params?.pageSize ?? 5);
+                    let query = "";
+                    if(params){ 
+                        query += `current=${params.current}&pageSize=${params.pageSize}`
+                    }
+                    if(params?.email){
+                        query += `&email=${params.email}`;
+                        console.log(query);
+                    }
+                    if(params?.name){
+                        query += `&name=${params.name}`;
+                    }
+
+                    const response = await fetchListUser(query);
                     if (response.data) {
                         setMeta(response.data.meta);
                     }
