@@ -1,4 +1,4 @@
-import { fetchListUser } from '@/services/api';
+import { fetchListUser, fetchUserById } from '@/services/api';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable, TableDropdown } from '@ant-design/pro-components';
@@ -7,9 +7,31 @@ import { useRef, useState } from 'react';
 import './table.user.css';
 import moment from 'moment';
 import dayjs from 'dayjs';
+import UserDetail from './user.detail';
 
 
-const columns: ProColumns<IModelPaginate>[] = [
+const TableUser = () => {
+    const actionRef = useRef<ActionType>();
+    const [meta, setMeta] = useState({
+        current: 1,
+        pageSize: 5,
+        pages: 0,
+        total: 0,
+    });  // quản lý pagination
+
+    type TSearch = {
+        name: string,
+        email: string,
+        startDate: string,
+        endDate: string,
+    };
+
+
+    const [dataDetailUser, setDataDetailUser] = useState<boolean>(false);
+    const [openDetailUser, setOpenDetailUser] = useState<IUser | null>(null);
+
+
+    const columns: ProColumns<IModelPaginate>[] = [
     {
         dataIndex: 'index',
         valueType: 'indexBorder',
@@ -23,7 +45,15 @@ const columns: ProColumns<IModelPaginate>[] = [
         hideInSearch: true,
         render(dom, entity, index, action, schema) {
             return (
-                <a href="#">{entity._id}</a>
+                <a
+                    onClick={async () => {
+                        // setDataDetailUser(entity);
+                        // setOpenDetailUser(true);
+                        const response = await fetchUserById(entity._id);
+                        setDataDetailUser(response.data);
+                        setOpenDetailUser(true);
+                    }} 
+                href="#">{entity._id}</a>
             )
         },
     },
@@ -80,21 +110,6 @@ const columns: ProColumns<IModelPaginate>[] = [
     },
 ];
 
-const TableUser = () => {
-    const actionRef = useRef<ActionType>();
-    const [meta, setMeta] = useState({
-        current: 1,
-        pageSize: 5,
-        pages: 0,
-        total: 0,
-    });  // quản lý pagination
-
-    type TSearch = {
-        name: string,
-        email: string,
-        startDate: string,
-        endDate: string,
-    };
     return (
         <>
             <ProTable<IModelPaginate, TSearch>
@@ -170,6 +185,12 @@ const TableUser = () => {
                         Add new
                     </Button>
                 ]}
+            />
+            <UserDetail
+                dataDetailUser={dataDetailUser}
+                setDataDetailUser={setDataDetailUser}
+                openDetailUser={openDetailUser}
+                setOpenDetailUser={setOpenDetailUser}
             />
         </>
     );

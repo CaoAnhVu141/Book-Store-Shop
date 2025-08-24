@@ -49,6 +49,20 @@ declare global {
         updatedAt: Date;
     }
 
+    interface IUserDetail {
+        _id: string;
+        name: string;
+        email: string;
+        role: {
+            _id: string;
+            name: string;
+        };
+        avatar: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }
+
+
     interface IFetchAccount {
         user: IUser;
     }

@@ -42,3 +42,8 @@ export const fetchListUser = (query: string) =>  {
     const urlBackend = `api/v1/users?${query}`;
     return axios.get<IBackendRes<IModelPaginate<IUser>>>(urlBackend);
 }
+
+export const fetchUserById = (_id: string) => {
+    const urlBackend = `api/v1/users/${_id}`;
+    return axios.get<IBackendRes<IModelPaginate<IUserDetail>>>(urlBackend);
+}
