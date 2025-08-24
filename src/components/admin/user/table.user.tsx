@@ -46,15 +46,23 @@ const columns: ProColumns<IModelPaginate>[] = [
         ellipsis: true,
         copyable: true,
         search: true,
+        sorter: true,
     },
     {
         disable: true,
         title: 'Created At',
         dataIndex: 'createdAt',
         filters: true,
-        valueType: 'dateRange',
+        sorter: true,
+        valueType: 'date',
         render: (_, record) => dayjs(record.createdAt).format('DD/MM/YYYY'),
         renderFormItem: () => <DatePicker.RangePicker format="DD/MM/YYYY" />,
+        search: {
+            transform: (value) => ({
+                startDate: dayjs(value[0]).format('YYYY-MM-DD'),
+                endDate: dayjs(value[1]).format('YYYY-MM-DD'),
+            }),
+        },
     },
     {
         disable: true,
@@ -81,9 +89,11 @@ const TableUser = () => {
         total: 0,
     });  // quản lý pagination
 
-    type TSearch =  {
+    type TSearch = {
         name: string,
         email: string,
+        startDate: string,
+        endDate: string,
     };
     return (
         <>
@@ -93,15 +103,28 @@ const TableUser = () => {
                 cardBordered
                 request={async (params, sort, filter) => {
                     let query = "";
-                    if(params){ 
+                    if (params) {
                         query += `current=${params.current}&pageSize=${params.pageSize}`
                     }
-                    if(params?.email){
+                    if (params?.email) {
                         query += `&email=${params.email}`;
-                        console.log(query);
                     }
-                    if(params?.name){
+                    if (params?.name) {
                         query += `&name=${params.name}`;
+                    }
+
+                    if(params.startDate || params.endDate){
+                        query += `&startDate=${params.startDate}&endDate=${params.endDate}`;
+                    }
+                    
+                    // filter date and name ascend descend
+                    const sortFields: string[] = [];
+                    for(const key in sort){
+                        if(sort[key] === 'ascend') sortFields.push(key);
+                        if(sort[key] === 'descend') sortFields.push(`-${key}`);
+                    }
+                    if(sortFields.length > 0){
+                        query += `&sort=${sortFields.join(',')}`;
                     }
 
                     const response = await fetchListUser(query);
