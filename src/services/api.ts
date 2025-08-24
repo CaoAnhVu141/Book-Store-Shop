@@ -47,3 +47,9 @@ export const fetchUserById = (_id: string) => {
     const urlBackend = `api/v1/users/${_id}`;
     return axios.get<IBackendRes<IModelPaginate<IUserDetail>>>(urlBackend);
 }
+
+// @@@ todo
+// export const createNewUser = () => {
+//     const urlBackend = `api/v1/users`;
+//     return axios.post(urlBackend,);
+// }
