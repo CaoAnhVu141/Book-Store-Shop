@@ -13,9 +13,6 @@ interface IProp {
 const UserDetail = (props: IProp) => {
 
     const { openDetailUser, setOpenDetailUser, dataDetailUser, setDataDetailUser } = props;
-    const showDrawer = () => {
-        setOpenDetailUser(true);
-    };
 
     const onClose = () => {
         setOpenDetailUser(false);

@@ -48,7 +48,7 @@ export const fetchUserById = (_id: string) => {
     return axios.get<IBackendRes<IModelPaginate<IUserDetail>>>(urlBackend);
 }
 
-export const createNewUser = (name: string, email: string, password: string, age: string, gender: string, role: string) => {
+export const createNewUser = (name: string, email: string, password: string, age: number, gender: string, role: string) => {
     const urlBackend = `api/v1/users`;
     const data = {
         name: name, email: email, password: password, age: age, gender: gender, role: role,

@@ -8,6 +8,7 @@ import './table.user.css';
 import moment from 'moment';
 import dayjs from 'dayjs';
 import UserDetail from './user.detail';
+import CreateUser from './create.user';
 
 
 const TableUser = () => {
@@ -26,10 +27,10 @@ const TableUser = () => {
         endDate: string,
     };
 
-
     const [dataDetailUser, setDataDetailUser] = useState<boolean>(false);
     const [openDetailUser, setOpenDetailUser] = useState<IUser | null>(null);
 
+    const [openCreateUser, setOpenCreateUser] = useState<boolean>(false);
 
     const columns: ProColumns<IModelPaginate>[] = [
     {
@@ -47,8 +48,6 @@ const TableUser = () => {
             return (
                 <a
                     onClick={async () => {
-                        // setDataDetailUser(entity);
-                        // setOpenDetailUser(true);
                         const response = await fetchUserById(entity._id);
                         setDataDetailUser(response.data);
                         setOpenDetailUser(true);
@@ -109,6 +108,11 @@ const TableUser = () => {
         filters: true,
     },
 ];
+
+    // refresh sau khi tạo mới
+    const refreshTable = () => {
+        actionRef.current?.reload();
+    }
 
     return (
         <>
@@ -179,7 +183,7 @@ const TableUser = () => {
                         key="button"
                         icon={<PlusOutlined />}
                         onClick={() => {
-                            actionRef.current?.reload();
+                            setOpenCreateUser(true);
                         }}
                         type="primary">
                         Add new
@@ -191,6 +195,11 @@ const TableUser = () => {
                 setDataDetailUser={setDataDetailUser}
                 openDetailUser={openDetailUser}
                 setOpenDetailUser={setOpenDetailUser}
+            />
+            <CreateUser
+                openCreateUser={openCreateUser}
+                setOpenCreateUser={setOpenCreateUser}
+                refreshTable={refreshTable}
             />
         </>
     );
