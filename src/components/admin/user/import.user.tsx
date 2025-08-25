@@ -1,5 +1,5 @@
 import { InboxOutlined } from "@ant-design/icons";
-import { Modal, Space, Table } from "antd";
+import { message, Modal, Space, Table, Upload } from "antd";
 import Dragger from "antd/es/upload/Dragger";
 
 interface IProp {
@@ -8,15 +8,36 @@ interface IProp {
 }
 
 interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
+    key: string;
+    name: string;
+    age: number;
+    address: string;
 }
+
 
 const ImportUser = (props: IProp) => {
 
     const { openImportUser, setImportUser } = props;
+    const { Dragger } = Upload;
+
+
+    const propUpload = {
+        name: 'file',
+        multiple: false,
+        // action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
+        onChange(info) {
+            const { status } = info.file;
+            if (status !== 'uploading') {
+                console.log(info.file, info.fileList);
+            }
+            if (status === 'done') {
+                message.success(`${info.file.name} file uploaded successfully.`);
+            } else if (status === 'error') {
+                message.error(`${info.file.name} file upload failed.`);
+            }
+        }
+    };
+
     const columns = [
         {
             title: 'Name',
@@ -75,7 +96,7 @@ const ImportUser = (props: IProp) => {
             onCancel={() => {
                 setImportUser(false)
             }}
-            width={800} 
+            width={800}
         >
             <Dragger {...props}>
                 <p className="ant-upload-drag-icon">
@@ -88,10 +109,10 @@ const ImportUser = (props: IProp) => {
                 </p>
             </Dragger>
             <div style={{ marginTop: 20 }}>
-                <Table 
-                    columns={columns} 
+                <Table
+                    columns={columns}
                     dataSource={data}
-                    scroll={{ y: 240 }} 
+                    scroll={{ y: 240 }}
                     pagination={false}
                 />
             </div>
