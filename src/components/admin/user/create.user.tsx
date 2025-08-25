@@ -31,7 +31,9 @@ const CreateUser = (props: IProp) => {
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
 
         const { name, email, password, age, gender, role } = values;
+        setIsSubmit(true);
         const response = await createNewUser(name, email, password, age, gender, role);
+        console.log("check response: ", response);
         if (response && response.data) {
             form.resetFields();
             setOpenCreateUser(false);

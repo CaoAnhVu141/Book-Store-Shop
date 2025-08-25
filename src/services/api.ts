@@ -55,3 +55,5 @@ export const createNewUser = (name: string, email: string, password: string, age
     }
     return axios.post<IBackendRes<ICreateUser>>(urlBackend,data);
 }
+
+
