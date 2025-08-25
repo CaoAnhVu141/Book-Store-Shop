@@ -66,4 +66,14 @@ declare global {
     interface IFetchAccount {
         user: IUser;
     }
+
+    interface ICreateUser {
+        _id: string;
+        name: string;
+        email: string;
+        role: string;
+        avatar: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }
 }
