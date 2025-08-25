@@ -1,8 +1,8 @@
-import { fetchListUser, fetchUserById } from '@/services/api';
+import { deteleUser, fetchListUser, fetchUserById } from '@/services/api';
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable, TableDropdown } from '@ant-design/pro-components';
-import { Button, DatePicker, Space, Tag } from 'antd';
+import { Button, DatePicker, message, Popconfirm, Space, Tag } from 'antd';
 import { useRef, useState } from 'react';
 import './table.user.css';
 import moment from 'moment';
@@ -32,90 +32,124 @@ const TableUser = () => {
 
     const [openCreateUser, setOpenCreateUser] = useState<boolean>(false);
 
+    const [messageApi, contextHolder] = message.useMessage();
+
+
     const columns: ProColumns<IModelPaginate>[] = [
-    {
-        dataIndex: 'index',
-        valueType: 'indexBorder',
-        width: 48,
-    },
-    {
-        title: 'ID',
-        dataIndex: '_id',
-        copyable: true,
-        ellipsis: true,
-        hideInSearch: true,
-        render(dom, entity, index, action, schema) {
-            return (
-                <a
-                    onClick={async () => {
-                        const response = await fetchUserById(entity._id);
-                        setDataDetailUser(response.data);
-                        setOpenDetailUser(true);
-                    }} 
-                href="#">{entity._id}</a>
-            )
+        {
+            dataIndex: 'index',
+            valueType: 'indexBorder',
+            width: 48,
         },
-    },
-    {
-        disable: true,
-        title: 'Email',
-        dataIndex: 'email',
-        filters: true,
-        onFilter: true,
-        ellipsis: true,
-        copyable: true,
-        search: true,
-    },
-    {
-        disable: true,
-        title: 'Name',
-        dataIndex: 'name',
-        filters: true,
-        onFilter: true,
-        ellipsis: true,
-        copyable: true,
-        search: true,
-        sorter: true,
-    },
-    {
-        disable: true,
-        title: 'Created At',
-        dataIndex: 'createdAt',
-        filters: true,
-        sorter: true,
-        valueType: 'date',
-        render: (_, record) => dayjs(record.createdAt).format('DD/MM/YYYY'),
-        renderFormItem: () => <DatePicker.RangePicker format="DD/MM/YYYY" />,
-        search: {
-            transform: (value) => ({
-                startDate: dayjs(value[0]).format('YYYY-MM-DD'),
-                endDate: dayjs(value[1]).format('YYYY-MM-DD'),
-            }),
+        {
+            title: 'ID',
+            dataIndex: '_id',
+            copyable: true,
+            ellipsis: true,
+            hideInSearch: true,
+            render(dom, entity, index, action, schema) {
+                return (
+                    <a
+                        onClick={async () => {
+                            const response = await fetchUserById(entity._id);
+                            setDataDetailUser(response.data);
+                            setOpenDetailUser(true);
+                        }}
+                        href="#">{entity._id}</a>
+                )
+            },
         },
-    },
-    {
-        disable: true,
-        title: 'Action',
-        dataIndex: 'action',
-        render: (_, record) => (
-            <>
-                <div className='action-module'>
-                    <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }} />
-                    <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
-                </div>
-            </>
-        ),
-        filters: true,
-    },
-];
+        {
+            disable: true,
+            title: 'Email',
+            dataIndex: 'email',
+            filters: true,
+            onFilter: true,
+            ellipsis: true,
+            copyable: true,
+            search: true,
+        },
+        {
+            disable: true,
+            title: 'Name',
+            dataIndex: 'name',
+            filters: true,
+            onFilter: true,
+            ellipsis: true,
+            copyable: true,
+            search: true,
+            sorter: true,
+        },
+        {
+            disable: true,
+            title: 'Created At',
+            dataIndex: 'createdAt',
+            filters: true,
+            sorter: true,
+            valueType: 'date',
+            render: (_, record) => dayjs(record.createdAt).format('DD/MM/YYYY'),
+            renderFormItem: () => <DatePicker.RangePicker format="DD/MM/YYYY" />,
+            search: {
+                transform: (value) => ({
+                    startDate: dayjs(value[0]).format('YYYY-MM-DD'),
+                    endDate: dayjs(value[1]).format('YYYY-MM-DD'),
+                }),
+            },
+        },
+        {
+            disable: true,
+            title: 'Action',
+            dataIndex: 'action',
+            render: (_, record) => (
+                <>
+                    <div className='action-module'>
+                        <Popconfirm
+                            title="Xoá user"
+                            description="Bạn có muốn xoá user này"
+                            onConfirm={() => {
+                                handleDeleteUser(record._id)
+                            }}
+                            // onCancel={cancel}
+                            okText="Xác nhận"
+                            cancelText="No"
+                        >
+                        <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
+                        </Popconfirm>
+                        <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }} />
+
+                    </div>
+                </>
+            ),
+            filters: true,
+        },
+    ];
 
     // refresh sau khi tạo mới
     const refreshTable = () => {
         actionRef.current?.reload();
     }
 
+
+    const handleDeleteUser = async (id: string) => {
+        const response = await deteleUser(id);
+        if (response && response.data) {
+            messageApi.open({
+                type: 'success',
+                content: 'Xoá thành công',
+            });
+            refreshTable();
+        }
+        else {
+            messageApi.open({
+                type: 'error',
+                content: response.message,
+            });
+        }
+    }
+
     return (
         <>
+            {contextHolder}
             <ProTable<IModelPaginate, TSearch>
                 columns={columns}
                 actionRef={actionRef}
@@ -132,17 +166,17 @@ const TableUser = () => {
                         query += `&name=${params.name}`;
                     }
 
-                    if(params.startDate || params.endDate){
+                    if (params.startDate || params.endDate) {
                         query += `&startDate=${params.startDate}&endDate=${params.endDate}`;
                     }
-                    
+
                     // filter date and name ascend descend
                     const sortFields: string[] = [];
-                    for(const key in sort){
-                        if(sort[key] === 'ascend') sortFields.push(key);
-                        if(sort[key] === 'descend') sortFields.push(`-${key}`);
+                    for (const key in sort) {
+                        if (sort[key] === 'ascend') sortFields.push(key);
+                        if (sort[key] === 'descend') sortFields.push(`-${key}`);
                     }
-                    if(sortFields.length > 0){
+                    if (sortFields.length > 0) {
                         query += `&sort=${sortFields.join(',')}`;
                     }
 

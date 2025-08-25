@@ -56,4 +56,9 @@ export const createNewUser = (name: string, email: string, password: string, age
     return axios.post<IBackendRes<ICreateUser>>(urlBackend,data);
 }
 
+export const deteleUser = (_id:string) => {
+    const urlBackend = `api/v1/users/${_id}`;
+    return axios.delete<IBackendRes<IUser>>(urlBackend);
+}
+
 
