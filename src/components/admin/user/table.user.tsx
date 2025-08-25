@@ -1,5 +1,5 @@
 import { deteleUser, fetchListUser, fetchUserById } from '@/services/api';
-import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, ImportOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable, TableDropdown } from '@ant-design/pro-components';
 import { Button, DatePicker, message, Popconfirm, Space, Tag } from 'antd';
@@ -9,6 +9,7 @@ import moment from 'moment';
 import dayjs from 'dayjs';
 import UserDetail from './user.detail';
 import CreateUser from './create.user';
+import ImportUser from './import.user';
 
 
 const TableUser = () => {
@@ -33,6 +34,9 @@ const TableUser = () => {
     const [openCreateUser, setOpenCreateUser] = useState<boolean>(false);
 
     const [messageApi, contextHolder] = message.useMessage();
+
+    // thực thi khai báo truyền import user
+    const [openImportUser, setImportUser] = useState<boolean>(false);
 
 
     const columns: ProColumns<IModelPaginate>[] = [
@@ -221,6 +225,15 @@ const TableUser = () => {
                         }}
                         type="primary">
                         Add new
+                    </Button>,
+                    <Button
+                        key="button"
+                        icon={<ImportOutlined />}
+                        onClick={() => {
+                            setImportUser(true);
+                        }}
+                        type="primary">
+                        Import
                     </Button>
                 ]}
             />
@@ -234,6 +247,10 @@ const TableUser = () => {
                 openCreateUser={openCreateUser}
                 setOpenCreateUser={setOpenCreateUser}
                 refreshTable={refreshTable}
+            />
+            <ImportUser
+                openImportUser={openImportUser}
+                setImportUser={setImportUser}
             />
         </>
     );
