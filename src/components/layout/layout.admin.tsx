@@ -8,6 +8,7 @@ import {
     DollarCircleOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
+    ProfileOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu, Dropdown, Space, Avatar, message } from 'antd';
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -44,7 +45,7 @@ const LayoutAdmin = () => {
             icon: <UserOutlined />,
             children: [
                 {
-                    label: <Link to='/admin/user'>CRUD</Link>,
+                    label: <Link to='/admin/user'>Quản lý User</Link>,
                     key: '/admin/user',
                     icon: <TeamOutlined />,
                 },
@@ -59,6 +60,11 @@ const LayoutAdmin = () => {
             label: <Link to='/admin/order'>Manage Orders</Link>,
             key: '/admin/order',
             icon: <DollarCircleOutlined />
+        },
+        {
+            label: <Link to='/admin/category'>Manage Category</Link>,
+            key: '/admin/category',
+            icon: <ProfileOutlined />
         },
 
     ];

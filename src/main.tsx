@@ -20,6 +20,7 @@ import DashboardPage from './pages/admin/dashboard';
 import ManagerOrderPage from './pages/admin/manager.order';
 import ManagerBookPage from './pages/admin/manager.book';
 import ManagerUserPage from './pages/admin/manager.user';
+import ManagerCategoryPage from './pages/admin/manager.category';
 
 const router = createBrowserRouter([
   {
@@ -84,7 +85,15 @@ const router = createBrowserRouter([
             <ManagerUserPage />
           </ProtectedRoute>
         ),
-      }
+      },
+      {
+        path: "category",
+        element: (
+          <ProtectedRoute>
+            <ManagerCategoryPage />
+          </ProtectedRoute>
+        ),
+      },
     ]
   },
   {
