@@ -133,7 +133,6 @@ const TableUser = () => {
         actionRef.current?.reload();
     }
 
-
     const handleDeleteUser = async (id: string) => {
         const response = await deteleUser(id);
         if (response && response.data) {
@@ -224,7 +223,7 @@ const TableUser = () => {
                             setOpenCreateUser(true);
                         }}
                         type="primary">
-                        Add new
+                        Thêm mới
                     </Button>,
                     <Button
                         key="button"
@@ -234,6 +233,15 @@ const TableUser = () => {
                         }}
                         type="primary">
                         Import
+                    </Button>,
+                    <Button
+                        key="button"
+                        icon={<ImportOutlined />}
+                        onClick={() => {
+                            setImportUser(true);
+                        }}
+                        type="primary">
+                        Export
                     </Button>
                 ]}
             />

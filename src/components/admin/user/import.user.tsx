@@ -1,6 +1,7 @@
 import { InboxOutlined } from "@ant-design/icons";
 import { message, Modal, Space, Table, Upload } from "antd";
 import Dragger from "antd/es/upload/Dragger";
+import type { UploadProps } from 'antd';
 
 interface IProp {
     openImportUser: boolean;
@@ -10,8 +11,8 @@ interface IProp {
 interface DataType {
     key: string;
     name: string;
-    age: number;
-    address: string;
+    email: string;
+    role: string;
 }
 
 
@@ -21,10 +22,17 @@ const ImportUser = (props: IProp) => {
     const { Dragger } = Upload;
 
 
-    const propUpload = {
+    const propUpload: UploadProps  = {
         name: 'file',
         multiple: false,
+        maxCount:1,
         // action: 'https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload',
+        accept: "text/plain, .csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel",
+        customRequest({file, onSuccess}){
+            setTimeout(() => {
+                if(onSuccess) onSuccess("ok");
+            }, 1000);
+        },
         onChange(info) {
             const { status } = info.file;
             if (status !== 'uploading') {
@@ -46,24 +54,14 @@ const ImportUser = (props: IProp) => {
             render: (text: string) => <a>{text}</a>,
         },
         {
-            title: 'Age',
-            dataIndex: 'age',
-            key: 'age',
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
         },
         {
-            title: 'Address',
-            dataIndex: 'address',
-            key: 'address',
-        },
-        {
-            title: 'Action',
-            key: 'action',
-            render: (_: any, record: DataType) => (
-                <Space size="middle">
-                    <a>Invite {record.name}</a>
-                    <a>Delete</a>
-                </Space>
-            ),
+            title: 'Role',
+            dataIndex: 'role',
+            key: 'role',
         },
     ];
 
@@ -71,20 +69,20 @@ const ImportUser = (props: IProp) => {
         {
             key: '1',
             name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
+            email: "Kim@gmail.com",
+            role: "Admin",
         },
         {
             key: '2',
             name: 'Jim Green',
-            age: 42,
-            address: 'London No. 1 Lake Park',
+            email: "huhu@gmail.com",
+            role: "User"
         },
         {
             key: '3',
             name: 'Joe Black',
-            age: 32,
-            address: 'Sydney No. 1 Lake Park',
+            email: "huhu@gmail.com",
+            role: "Nhân viên"
         },
     ];
 
@@ -97,6 +95,8 @@ const ImportUser = (props: IProp) => {
                 setImportUser(false)
             }}
             width={800}
+            okText="Import Data"
+            maskClosable={false}
         >
             <Dragger {...props}>
                 <p className="ant-upload-drag-icon">
