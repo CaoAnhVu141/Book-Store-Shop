@@ -82,5 +82,13 @@ export const exportFileExcel = (data: any[]) => {
     });
 }
 
+export const updateUser = (_id: string,name: string, password: string, age: number, gender: string, role: string) => {
+    const urlBackend = `api/v1/users/${_id}`;
+    const data = {
+        name: name, password: password, age: age, gender: gender, role: role
+    }
+    return axios.patch(urlBackend,data);
+}
+
 
 
