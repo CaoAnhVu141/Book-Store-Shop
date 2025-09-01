@@ -156,7 +156,6 @@ const TableUser = () => {
 
     const handleExportFileExcel = async () => {
         try {
-            console.log("check currentData: ", response);
             const response = await exportFileExcel(currentData);
             if (response) {
                 messageApi.open({
@@ -214,7 +213,6 @@ const TableUser = () => {
 
                     const response = await fetchListUser(query);
                     if (response.data) {
-                        console.log("check response.data: ", response.data);
                         setMeta(response.data.meta);
                         setCurrentData(response.data?.result ?? []);
                     }
