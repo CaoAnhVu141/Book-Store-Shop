@@ -4,23 +4,27 @@ import type { UploadProps } from 'antd';
 import { useState } from "react";
 import Exceljs from 'exceljs';
 import { Buffer } from "buffer";
+import { exportFileExcel, uploadFileExcel } from "@/services/api";
+import { saveAs } from 'file-saver';
+
 
 interface IProp {
     openImportUser: boolean;
     setImportUser: (v: boolean) => void;
+    refreshTable: () => void;
 }
 
 interface IDataImport {
-    key: string;
     name: string;
     email: string;
+    password: string;
     role: string;
 }
 
 
 const ImportUser = (props: IProp) => {
 
-    const { openImportUser, setImportUser } = props;
+    const { openImportUser, setImportUser, refreshTable } = props;
     const { Dragger } = Upload;
 
     const [dataImport, setDataImport] = useState<IDataImport[]>([]);
@@ -46,10 +50,10 @@ const ImportUser = (props: IProp) => {
             if (status === 'done') {
                 if (info.fileList && info.fileList.length > 0) {
                     const file = info.fileList[0].originFileObj!;
-                    await handleUploadFile(file);
+                    await handleReadFile(file);
                     messageApi.open({
                         type: 'success',
-                        content: `Import ${info.file.name} thành công`,
+                        content: `Đọc file ${info.file.name} thành công`,
                     });
                 }
                 else {
@@ -83,7 +87,7 @@ const ImportUser = (props: IProp) => {
         },
     ];
 
-    const handleUploadFile = async (file: any) => {
+    const handleReadFile = async (file: any) => {
         const workbook = new Exceljs.Workbook();
         const arrayBuffer = await file.arrayBuffer()
         const buffer = Buffer.from(arrayBuffer);
@@ -115,11 +119,50 @@ const ImportUser = (props: IProp) => {
         setDataImport(jsonData)
     }
 
+    const handleUploadFile = async () => {
+        let data = [];
+
+        // Duyệt qua dataImport và tạo mảng dữ liệu để gửi lên backend
+        data = dataImport.map(item => ({
+            ...item,
+        }));
+
+        try {
+            const response = await uploadFileExcel(data);
+            if (response && response.data) {
+                console.log("check success: ", response.message);
+                messageApi.open({
+                    type: 'success',
+                    content: "Import thành công"
+                });
+                refreshTable();
+                setImportUser(false);
+            }
+            else {
+                messageApi.open({
+                    type: 'error',
+                    content: response.message || "Email đã trùng trong hệ thống",
+                });
+                setImportUser(false);
+            }
+        } catch (error: any) {
+            messageApi.open({
+                type: 'error',
+                content: error.response ? error.response.data.message : "Đã có lỗi khi thực hiện",
+            });
+        }
+        setDataImport([]);
+    };
+
+
     return (
         <Modal
-            title="Basic Modal"
+            title="Import dữ liệu Users"
             closable={{ 'aria-label': 'Custom Close Button' }}
             open={openImportUser}
+            onOk={() => {
+                handleUploadFile()
+            }}
             onCancel={() => {
                 setImportUser(false)
             }}
@@ -131,7 +174,7 @@ const ImportUser = (props: IProp) => {
                 <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                 </p>
-                <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                <p className="ant-upload-text">Nhấn vào để thực hiện Upload file Excel</p>
                 <p className="ant-upload-hint">
                     Support for a single or bulk upload. Strictly prohibited from uploading company data or other
                     banned files.

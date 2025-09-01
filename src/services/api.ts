@@ -3,25 +3,25 @@ import axios from "services/axios.customize"
 
 export const loginAPI = (username: string, password: string) => {
     const urlBackend = `/api/v1/auth/login`;
-    
-    return axios.post<IBackendRes<ILogin>>(urlBackend, {username,password},{
+
+    return axios.post<IBackendRes<ILogin>>(urlBackend, { username, password }, {
         headers: {
             delay: 1500,
         }
     });
 }
 
-export const registerAPI = (name: string,email: string,password: string) => {
+export const registerAPI = (name: string, email: string, password: string) => {
     const urlBackend = `/api/v1/auth/register`;
     const data = {
         name: name, email: email, password: password,
     }
-    return axios.post(urlBackend,data);
+    return axios.post(urlBackend, data);
 }
 
 export const fetchAccountAPI = () => {
     const urlBackend = `/api/v1/auth/account`;
-    return axios.get<IBackendRes<IFetchAccount>>(urlBackend,{
+    return axios.get<IBackendRes<IFetchAccount>>(urlBackend, {
         headers: {
             delay: 1500
         }
@@ -30,7 +30,7 @@ export const fetchAccountAPI = () => {
 
 export const logoutAPI = () => {
     const urlBackend = `/api/v1/auth/logout`;
-    return axios.post<IBackendRes<IRegister>>(urlBackend,{
+    return axios.post<IBackendRes<IRegister>>(urlBackend, {
         Headers: {
             delay: 1500,
         }
@@ -38,7 +38,7 @@ export const logoutAPI = () => {
 }
 
 
-export const fetchListUser = (query: string) =>  {
+export const fetchListUser = (query: string) => {
     const urlBackend = `api/v1/users?${query}`;
     return axios.get<IBackendRes<IModelPaginate<IUser>>>(urlBackend);
 }
@@ -53,14 +53,34 @@ export const createNewUser = (name: string, email: string, password: string, age
     const data = {
         name: name, email: email, password: password, age: age, gender: gender, role: role,
     }
-    return axios.post<IBackendRes<ICreateUser>>(urlBackend,data);
+    return axios.post<IBackendRes<ICreateUser>>(urlBackend, data);
 }
 
-export const deteleUser = (_id:string) => {
+export const deteleUser = (_id: string) => {
     const urlBackend = `api/v1/users/${_id}`;
     return axios.delete<IBackendRes<IUser>>(urlBackend);
 }
 
+// export const uploadFileExcel = (data: {
+//     name: string, email: string, password: string, role: string
+// }) => {
+//     const urlBackend = `api/v1/file-excel`;
+//     return axios.post<IBackendRes<IImportUser>>(urlBackend, data);
+// }
+export const uploadFileExcel = (data: any) => {
+    const urlBackend = `api/v1/file-excel/import`;
+
+    // Gửi đối tượng có trường `data`, trong đó chứa mảng các đối tượng
+    return axios.post(urlBackend, { data });
+};
+
+
+export const exportFileExcel = (data: any[]) => {
+    const urlBackend = `api/v1/file-excel/export`;
+    return axios.post(urlBackend, data, {
+        responseType: 'blob',
+    });
+}
 
 
 

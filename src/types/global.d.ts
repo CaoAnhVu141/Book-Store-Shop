@@ -76,4 +76,14 @@ declare global {
         createdAt: Date;
         updatedAt: Date;
     }
+
+    interface IImportUser {
+        data: {
+            name: string;
+            email: string;
+            password: string;
+            role: string;
+        }
+
+    }
 }

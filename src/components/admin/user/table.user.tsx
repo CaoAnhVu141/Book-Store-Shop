@@ -5,11 +5,12 @@ import { ProTable, TableDropdown } from '@ant-design/pro-components';
 import { Button, DatePicker, message, Popconfirm, Space, Tag } from 'antd';
 import { useRef, useState } from 'react';
 import './table.user.css';
-import moment from 'moment';
 import dayjs from 'dayjs';
 import UserDetail from './user.detail';
 import CreateUser from './create.user';
 import ImportUser from './import.user';
+import { exportFileExcel } from "@/services/api";
+import { saveAs } from 'file-saver';
 
 
 const TableUser = () => {
@@ -37,6 +38,9 @@ const TableUser = () => {
 
     // thực thi khai báo truyền import user
     const [openImportUser, setImportUser] = useState<boolean>(false);
+
+    //lấy data table hiện tại
+    const [currentData, setCurrentData] = useState<IUser[]>([]);
 
 
     const columns: ProColumns<IModelPaginate>[] = [
@@ -117,7 +121,7 @@ const TableUser = () => {
                             okText="Xác nhận"
                             cancelText="No"
                         >
-                        <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
+                            <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
                         </Popconfirm>
                         <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }} />
 
@@ -146,6 +150,31 @@ const TableUser = () => {
             messageApi.open({
                 type: 'error',
                 content: response.message,
+            });
+        }
+    }
+
+    const handleExportFileExcel = async () => {
+        try {
+            console.log("check currentData: ", response);
+            const response = await exportFileExcel(currentData);
+            if (response) {
+                messageApi.open({
+                    type: 'success',
+                    content: "Export file thành công"
+                });
+                saveAs(response, 'users.csv');
+                refreshTable();
+            } else {
+                messageApi.open({
+                    type: 'error',
+                    content: "Export chưa thành công",
+                });
+            }
+        } catch (error: any) {
+            messageApi.open({
+                type: 'error',
+                content: error.response ? error.response.data.message : "Đã có lỗi khi thực hiện",
             });
         }
     }
@@ -185,7 +214,9 @@ const TableUser = () => {
 
                     const response = await fetchListUser(query);
                     if (response.data) {
+                        console.log("check response.data: ", response.data);
                         setMeta(response.data.meta);
+                        setCurrentData(response.data?.result ?? []);
                     }
                     return {
                         data: response.data?.result,
@@ -238,7 +269,8 @@ const TableUser = () => {
                         key="button"
                         icon={<ImportOutlined />}
                         onClick={() => {
-                            setImportUser(true);
+                            
+                            handleExportFileExcel(currentData);
                         }}
                         type="primary">
                         Export
@@ -259,6 +291,7 @@ const TableUser = () => {
             <ImportUser
                 openImportUser={openImportUser}
                 setImportUser={setImportUser}
+                refreshTable={refreshTable}
             />
         </>
     );
