@@ -44,6 +44,8 @@ declare global {
             _id: string,
             name: string,
         }
+        age: number;
+        gender: string;
         avatar: string;
         createdAt: Date;
         updatedAt: Date;

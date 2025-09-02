@@ -61,12 +61,6 @@ export const deteleUser = (_id: string) => {
     return axios.delete<IBackendRes<IUser>>(urlBackend);
 }
 
-// export const uploadFileExcel = (data: {
-//     name: string, email: string, password: string, role: string
-// }) => {
-//     const urlBackend = `api/v1/file-excel`;
-//     return axios.post<IBackendRes<IImportUser>>(urlBackend, data);
-// }
 export const uploadFileExcel = (data: any) => {
     const urlBackend = `api/v1/file-excel/import`;
 
@@ -82,12 +76,17 @@ export const exportFileExcel = (data: any[]) => {
     });
 }
 
-export const updateUser = (_id: string,name: string, password: string, age: number, gender: string, role: string) => {
+export const fetchDataUpdateUserById = (_id: string) => {
+    const urlBackend = `api/v1/users/${_id}`;
+    return axios.get<IBackendRes<IModelPaginate<IUser>>>(urlBackend);
+}
+
+export const updateUser = (_id: string,name: string, age: number, gender: string, role: string) => {
     const urlBackend = `api/v1/users/${_id}`;
     const data = {
-        name: name, password: password, age: age, gender: gender, role: role
+       name: name, age: age, gender: gender, role: role
     }
-    return axios.patch(urlBackend,data);
+    return axios.patch<IBackendRes<IUser>>(urlBackend,data);
 }
 
 

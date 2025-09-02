@@ -1,4 +1,4 @@
-import { deteleUser, fetchListUser, fetchUserById } from '@/services/api';
+import { deteleUser, fetchDataUpdateUserById, fetchListUser, fetchUserById } from '@/services/api';
 import { DeleteOutlined, EditOutlined, ImportOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable, TableDropdown } from '@ant-design/pro-components';
@@ -11,6 +11,7 @@ import CreateUser from './create.user';
 import ImportUser from './import.user';
 import { exportFileExcel } from "@/services/api";
 import { saveAs } from 'file-saver';
+import UpdateUser from './update.user';
 
 
 const TableUser = () => {
@@ -29,8 +30,8 @@ const TableUser = () => {
         endDate: string,
     };
 
-    const [dataDetailUser, setDataDetailUser] = useState<boolean>(false);
     const [openDetailUser, setOpenDetailUser] = useState<IUser | null>(null);
+    const [dataDetailUser, setDataDetailUser] = useState<boolean>(false);
 
     const [openCreateUser, setOpenCreateUser] = useState<boolean>(false);
 
@@ -42,6 +43,8 @@ const TableUser = () => {
     //lấy data table hiện tại
     const [currentData, setCurrentData] = useState<IUser[]>([]);
 
+    const [openUpadteUser, setOpenUpdateUser] = useState<IUser | null>(null);
+    const [dataUpdateUser, setDataUpdateUser] = useState<boolean>(false);
 
     const columns: ProColumns<IModelPaginate>[] = [
         {
@@ -115,16 +118,17 @@ const TableUser = () => {
                             title="Xoá user"
                             description="Bạn có muốn xoá user này"
                             onConfirm={() => {
-                                handleDeleteUser(record._id)
+                                handleDeleteUser(record._id);
                             }}
                             // onCancel={cancel}
                             okText="Xác nhận"
                             cancelText="No"
                         >
-                            <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
+                        <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
                         </Popconfirm>
-                        <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }} />
-
+                        <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }} onClick={async () => {
+                            const response = await fetchDataUpdateUserById(record._id);
+                            setDataUpdateUser(response.data); setOpenUpdateUser(true) }}/>
                     </div>
                 </>
             ),
@@ -267,8 +271,7 @@ const TableUser = () => {
                         key="button"
                         icon={<ImportOutlined />}
                         onClick={() => {
-                            
-                            handleExportFileExcel(currentData);
+                            handleExportFileExcel();
                         }}
                         type="primary">
                         Export
@@ -289,6 +292,13 @@ const TableUser = () => {
             <ImportUser
                 openImportUser={openImportUser}
                 setImportUser={setImportUser}
+                refreshTable={refreshTable}
+            />
+            <UpdateUser
+                openUpadteUser={openUpadteUser}
+                setOpenUpdateUser={setOpenUpdateUser}
+                dataUpdateUser={dataUpdateUser}
+                setDataUpdateUser={setDataUpdateUser}
                 refreshTable={refreshTable}
             />
         </>
