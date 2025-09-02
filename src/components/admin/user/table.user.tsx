@@ -82,7 +82,7 @@ const TableUser = () => {
         },
         {
             disable: true,
-            title: 'Name',
+            title: 'Họ tên',
             dataIndex: 'name',
             filters: true,
             onFilter: true,
@@ -93,7 +93,7 @@ const TableUser = () => {
         },
         {
             disable: true,
-            title: 'Created At',
+            title: 'Ngày tạo',
             dataIndex: 'createdAt',
             filters: true,
             sorter: true,
@@ -109,7 +109,7 @@ const TableUser = () => {
         },
         {
             disable: true,
-            title: 'Action',
+            title: 'Hành động',
             dataIndex: 'action',
             render: (_, record) => (
                 <>
