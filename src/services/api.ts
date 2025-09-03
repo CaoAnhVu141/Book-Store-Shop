@@ -96,6 +96,21 @@ export const fetchAllCategory = (query: string) => {
     return axios.get<IBackendRes<IModelPaginate<ICategory>>>(urlBackend);
 }
 
+export const createCategory = (name: string, description: string) => {
+    const urlBackend = "api/v1/categories";
+    const data = {name, description};
+    return axios.post<IBackendRes<ICategory>>(urlBackend,data);
+}
+
+export const deteleCategory = (_id: string) => {
+    const urlBackend = `api/v1/categories/${_id}`;
+    return axios.delete<IBackendRes<ICategory>>(urlBackend)
+}
+
+export const fetchCategoryById = (_id: string) => {
+    const urlBackend = `api/v1/categories/${_id}`;
+    return axios.get<IBackendRes<ICategory>>(urlBackend);
+}
 
 
 
