@@ -86,6 +86,11 @@ declare global {
             password: string;
             role: string;
         }
+    }
 
+    interface ICategory{
+        _id: string, 
+        name: string,
+        descrription: string,
     }
 }

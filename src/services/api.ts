@@ -90,6 +90,12 @@ export const updateUser = (_id: string,name: string, age: number, gender: string
 }
 
 
+/// api with category
+export const fetchAllCategory = (query: string) => {
+    const urlBackend = `api/v1/categories?${query}`;
+    return axios.get<IBackendRes<IModelPaginate<ICategory>>>(urlBackend);
+}
+
 
 
 

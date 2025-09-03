@@ -1,6 +1,7 @@
+import { fetchAllCategory } from "@/services/api";
 import { DeleteOutlined, EditOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
 import { ProTable, type ProColumns } from "@ant-design/pro-components";
-import { Button, DatePicker } from "antd";
+import { Button, DatePicker, message, Popconfirm } from "antd";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
 
@@ -15,10 +16,12 @@ const TableCategory = () => {
 
     type TSearch = {
         name: string,
-        email: string,
+        description: string,
         startDate: string,
         endDate: string,
     };
+
+    const [messageApi, contextHolder] = message.useMessage();
 
     const columns: ProColumns<IModelPaginate>[] = [
 
@@ -115,10 +118,31 @@ const TableCategory = () => {
 
     return (
         <>
+            {contextHolder}
             <ProTable<IModelPaginate, TSearch>
                 columns={columns}
                 actionRef={actionRef}
                 cardBordered
+                request={async (params, sort, filter) => {
+                    let query = "";
+                    if (params) {
+                        query += `current=${params.current}&pageSize=${params.pageSize}`
+                    }
+                    const response = await fetchAllCategory(query);
+                    if (response.data) {
+                        setMeta(response.data.meta);
+                        messageApi.open({
+                            type: 'success',
+                            content: 'Hiển thị dữ liệu thành công',
+                        });
+                    }
+                    return {
+                        data: response.data?.result,
+                        page: 1,
+                        success: true,
+                        total: response.data?.meta.total
+                    }
+                }}
                 editable={{
                     type: 'multiple',
                 }}
@@ -165,8 +189,6 @@ const TableCategory = () => {
                 ]}
 
             />
-
-
         </>
     )
 
