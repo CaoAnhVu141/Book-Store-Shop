@@ -110,9 +110,11 @@ const TableCategory = () => {
                         >
                             <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
                         </Popconfirm>
-                        {/* <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }} onClick={async () => {
-                            const response = await fetchDataUpdateUserById(record._id);
-                            setDataUpdateUser(response.data); setOpenUpdateUser(true) }}/> */}
+                        <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }} 
+                        // onClick={async () => {
+                        //     const response = await fetchDataUpdateUserById(record._id);
+                        //     setDataUpdateUser(response.data); setOpenUpdateUser(true) }}
+                            />
                     </div>
                 </>
             ),
