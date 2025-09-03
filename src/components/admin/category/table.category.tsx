@@ -1,10 +1,11 @@
-import { fetchAllCategory } from "@/services/api";
+import { fetchAllCategory, fetchCategoryById } from "@/services/api";
 import { DeleteOutlined, EditOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
 import { ProTable, type ProColumns } from "@ant-design/pro-components";
 import { Button, DatePicker, message, Popconfirm } from "antd";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
 import CreateCategory from "./create.category";
+import DetailCategory from "./detail.category";
 
 const TableCategory = () => {
     const actionRef = useRef<ActionType>();
@@ -26,6 +27,9 @@ const TableCategory = () => {
 
     const [openCreateCategory, setOpenCreateCategory] = useState<boolean>(false);
 
+    const [openDetailCategory, setOpenDetailCategory] = useState<boolean>(false);
+    const [dataDetailCategory, setDataDetailCategory] = useState<ICategory | null>(null);
+
     const columns: ProColumns<IModelPaginate>[] = [
         {
             dataIndex: 'index',
@@ -41,11 +45,11 @@ const TableCategory = () => {
             render(dom, entity, index, action, schema) {
                 return (
                     <a
-                        // onClick={async () => {
-                        //     const response = await fetchUserById(entity._id);
-                        //     setDataDetailUser(response.data);
-                        //     setOpenDetailUser(true);
-                        // }}
+                        onClick={async () => {
+                            const response = await fetchCategoryById(entity._id);
+                            setDataDetailCategory(response.data);
+                            setOpenDetailCategory(true);
+                        }}
                         href="#">{entity._id}</a>
                 )
             },
@@ -139,7 +143,7 @@ const TableCategory = () => {
                     if (params?.description) {
                         query += `&description=${params.description}`;
                     }
-                    if(params?.startDate || params?.endDate){
+                    if (params?.startDate || params?.endDate) {
                         query += `&startDate=${params.startDate}&endDate=${params.endDate}`;
                     }
                     const response = await fetchAllCategory(query);
@@ -209,9 +213,15 @@ const TableCategory = () => {
                 ]}
             />
             <CreateCategory
-             openCreateCategory={openCreateCategory}
-             setOpenCreateCategory={setOpenCreateCategory}   
-             refreshTable={refreshTable}
+                openCreateCategory={openCreateCategory}
+                setOpenCreateCategory={setOpenCreateCategory}
+                refreshTable={refreshTable}
+            />
+            <DetailCategory
+                openDetailCategory={openDetailCategory}
+                setOpenDetailCategory={setOpenDetailCategory}
+                dataDetailCategory={dataDetailCategory}
+                setDataDetailCategory={setDataDetailCategory}
             />
         </>
     )

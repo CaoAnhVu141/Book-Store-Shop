@@ -64,7 +64,6 @@ declare global {
         updatedAt: Date;
     }
 
-
     interface IFetchAccount {
         user: IUser;
     }
@@ -91,6 +90,8 @@ declare global {
     interface ICategory{
         _id: string, 
         name: string,
-        descrription: string,
+        description: string,
+        createdAt: Date;
+        updatedAt: Date;
     }
 }
