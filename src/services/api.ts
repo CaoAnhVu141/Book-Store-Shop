@@ -112,6 +112,14 @@ export const fetchCategoryById = (_id: string) => {
     return axios.get<IBackendRes<ICategory>>(urlBackend);
 }
 
+export const updateCategory = (_id: string, name: string, description: string) => {
+    const urlBackend = `api/v1/categories/${_id}`;
+    const data = {
+        name: name, description: description,
+    }
+    return axios.patch<IBackendRes<ICategory>>(urlBackend,data);
+}
+
 
 
 

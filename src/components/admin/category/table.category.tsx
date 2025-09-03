@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { useRef, useState } from "react";
 import CreateCategory from "./create.category";
 import DetailCategory from "./detail.category";
+import UpdateCategory from "./update.category";
 
 const TableCategory = () => {
     const actionRef = useRef<ActionType>();
@@ -29,6 +30,10 @@ const TableCategory = () => {
 
     const [openDetailCategory, setOpenDetailCategory] = useState<boolean>(false);
     const [dataDetailCategory, setDataDetailCategory] = useState<ICategory | null>(null);
+
+    //update
+    const [openUpdateCategory, setOpenUpdateCategory] = useState<boolean>(false);
+    const [dataUpdateCategory,setDataUpdateCategory] = useState<ICategory | null>(null);
 
     const columns: ProColumns<IModelPaginate>[] = [
         {
@@ -111,9 +116,9 @@ const TableCategory = () => {
                             <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
                         </Popconfirm>
                         <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }} 
-                        // onClick={async () => {
-                        //     const response = await fetchDataUpdateUserById(record._id);
-                        //     setDataUpdateUser(response.data); setOpenUpdateUser(true) }}
+                        onClick={async () => {
+                            const response = await fetchCategoryById(record._id);
+                            setDataUpdateCategory(response.data); setOpenUpdateCategory(true) }}
                             />
                     </div>
                 </>
@@ -168,10 +173,6 @@ const TableCategory = () => {
                     const response = await fetchAllCategory(query);
                     if (response.data) {
                         setMeta(response.data.meta);
-                        messageApi.open({
-                            type: 'success',
-                            content: 'Hiển thị dữ liệu thành công',
-                        });
                     }
                     return {
                         data: response.data?.result,
@@ -241,6 +242,13 @@ const TableCategory = () => {
                 setOpenDetailCategory={setOpenDetailCategory}
                 dataDetailCategory={dataDetailCategory}
                 setDataDetailCategory={setDataDetailCategory}
+            />
+            <UpdateCategory
+                openUpdateCategory={openUpdateCategory}
+                setOpenUpdateCategory={setOpenUpdateCategory}
+                dataUpdateCategory={dataUpdateCategory}
+                setDataUpdateCategory={setDataUpdateCategory}
+                refreshTable={refreshTable}
             />
         </>
     )
