@@ -66,6 +66,11 @@ const LayoutAdmin = () => {
             key: '/admin/category',
             icon: <ProfileOutlined />
         },
+        {
+            label: <Link to='/admin/author'>Manage Author</Link>,
+            key: '/admin/author',
+            icon: <ProfileOutlined />
+        },
 
     ];
 

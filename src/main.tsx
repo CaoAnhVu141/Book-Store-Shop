@@ -21,6 +21,7 @@ import ManagerOrderPage from './pages/admin/manager.order';
 import ManagerBookPage from './pages/admin/manager.book';
 import ManagerUserPage from './pages/admin/manager.user';
 import ManagerCategoryPage from './pages/admin/manager.category';
+import ManagerAuthorPage from './pages/admin/manager.author';
 
 const router = createBrowserRouter([
   {
@@ -91,6 +92,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <ManagerCategoryPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "author",
+        element: (
+          <ProtectedRoute>
+            <ManagerAuthorPage />
           </ProtectedRoute>
         ),
       },
