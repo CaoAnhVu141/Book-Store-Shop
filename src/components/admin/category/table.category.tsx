@@ -1,4 +1,4 @@
-import { fetchAllCategory, fetchCategoryById } from "@/services/api";
+import { deteleCategory, fetchAllCategory, fetchCategoryById } from "@/services/api";
 import { DeleteOutlined, EditOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
 import { ProTable, type ProColumns } from "@ant-design/pro-components";
 import { Button, DatePicker, message, Popconfirm } from "antd";
@@ -101,9 +101,9 @@ const TableCategory = () => {
                         <Popconfirm
                             title="Xoá user"
                             description="Bạn có muốn xoá user này"
-                            // onConfirm={() => {
-                            //     handleDeleteUser(record._id);
-                            // }}
+                            onConfirm={() => {
+                                handleDeleteCategory(record._id);
+                            }}
                             // onCancel={cancel}
                             okText="Xác nhận"
                             cancelText="No"
@@ -123,6 +123,23 @@ const TableCategory = () => {
     // refresh sau khi tạo mới
     const refreshTable = () => {
         actionRef.current?.reload();
+    }
+
+    const handleDeleteCategory = async (_id: string) => {
+        const response = await deteleCategory(_id);
+        if(response && response.data){
+             messageApi.open({
+                type: 'success',
+                content: 'Tạo mới thành công',
+            });
+            refreshTable();
+        }
+        else{
+             messageApi.open({
+                type: 'error',
+                content: response.error,
+            });
+        }
     }
 
     return (
@@ -225,7 +242,5 @@ const TableCategory = () => {
             />
         </>
     )
-
-
 }
 export default TableCategory;
