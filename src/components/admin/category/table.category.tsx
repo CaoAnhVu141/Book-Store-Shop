@@ -4,6 +4,7 @@ import { ProTable, type ProColumns } from "@ant-design/pro-components";
 import { Button, DatePicker, message, Popconfirm } from "antd";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
+import CreateCategory from "./create.category";
 
 const TableCategory = () => {
     const actionRef = useRef<ActionType>();
@@ -23,8 +24,9 @@ const TableCategory = () => {
 
     const [messageApi, contextHolder] = message.useMessage();
 
-    const columns: ProColumns<IModelPaginate>[] = [
+    const [openCreateCategory, setOpenCreateCategory] = useState<boolean>(false);
 
+    const columns: ProColumns<IModelPaginate>[] = [
         {
             dataIndex: 'index',
             valueType: 'indexBorder',
@@ -38,15 +40,13 @@ const TableCategory = () => {
             hideInSearch: true,
             render(dom, entity, index, action, schema) {
                 return (
-                    // <a
-                    //     onClick={async () => {
-                    //         const response = await fetchUserById(entity._id);
-                    //         setDataDetailUser(response.data);
-                    //         setOpenDetailUser(true);
-                    //     }}
-                    //     href="#">{entity._id}</a>
-                    <>
-                    </>
+                    <a
+                        // onClick={async () => {
+                        //     const response = await fetchUserById(entity._id);
+                        //     setDataDetailUser(response.data);
+                        //     setOpenDetailUser(true);
+                        // }}
+                        href="#">{entity._id}</a>
                 )
             },
         },
@@ -116,6 +116,11 @@ const TableCategory = () => {
         },
     ];
 
+    // refresh sau khi tạo mới
+    const refreshTable = () => {
+        actionRef.current?.reload();
+    }
+
     return (
         <>
             {contextHolder}
@@ -127,6 +132,15 @@ const TableCategory = () => {
                     let query = "";
                     if (params) {
                         query += `current=${params.current}&pageSize=${params.pageSize}`
+                    }
+                    if (params?.name) {
+                        query += `&name=${params.name}`;
+                    }
+                    if (params?.description) {
+                        query += `&description=${params.description}`;
+                    }
+                    if(params?.startDate || params?.endDate){
+                        query += `&startDate=${params.startDate}&endDate=${params.endDate}`;
                     }
                     const response = await fetchAllCategory(query);
                     if (response.data) {
@@ -157,14 +171,20 @@ const TableCategory = () => {
                     },
                 }}
                 rowKey="_id"
+                pagination={{
+                    current: meta.current,
+                    pageSize: meta.pageSize,
+                    // showSizeChanger: true,
+                    total: meta.total,
+                }}
                 headerTitle="Table user"
                 toolBarRender={() => [
                     <Button
                         key="button"
                         icon={<PlusOutlined />}
-                        // onClick={() => {
-                        //     setOpenCreateUser(true);
-                        // }}
+                        onClick={() => {
+                            setOpenCreateCategory(true);
+                        }}
                         type="primary">
                         Thêm mới
                     </Button>,
@@ -187,7 +207,11 @@ const TableCategory = () => {
                         Export
                     </Button>
                 ]}
-
+            />
+            <CreateCategory
+             openCreateCategory={openCreateCategory}
+             setOpenCreateCategory={setOpenCreateCategory}   
+             refreshTable={refreshTable}
             />
         </>
     )
