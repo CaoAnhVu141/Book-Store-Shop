@@ -1,9 +1,10 @@
-import { fetchListAuthor } from "@/services/api";
+import { fetchAuthorById, fetchListAuthor } from "@/services/api";
 import { DeleteOutlined, EditOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
 import { ProTable, type ProColumns } from "@ant-design/pro-components";
 import { Button, DatePicker, Popconfirm } from "antd";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
+import DetailAuthor from "./detail.author";
 
 
 const TableAuthor = () => {
@@ -25,6 +26,11 @@ const TableAuthor = () => {
         endDate: string,
     };
 
+
+    const [openDetailAuthor,setOpenDetailAuthor] = useState<boolean>(false);
+
+    const [dataDetailAuthor, setDataDetailAuthor] = useState<IAuthor | null>(null);
+
     const columns: ProColumns<IModelPaginate>[] = [
         {
             dataIndex: 'index',
@@ -40,11 +46,11 @@ const TableAuthor = () => {
             render(dom, entity, index, action, schema) {
                 return (
                     <a
-                        // onClick={async () => {
-                        //     const response = await fetchCategoryById(entity._id);
-                        //     setDataDetailCategory(response.data);
-                        //     setOpenDetailCategory(true);
-                        // }}
+                        onClick={async () => {
+                            const response = await fetchAuthorById(entity._id);
+                            setDataDetailAuthor(response.data);
+                            setOpenDetailAuthor(true);
+                        }}
                         href="#">{entity._id}</a>
                 )
             },
@@ -190,6 +196,12 @@ const TableAuthor = () => {
                         Export
                     </Button>
                 ]}
+            />
+            <DetailAuthor
+            openDetailAuthor={openDetailAuthor}
+            setOpenDetailAuthor={setOpenDetailAuthor}
+            dataDetailAuthor={dataDetailAuthor}
+            setDataDetailAuthor={setDataDetailAuthor}
             />
         </>
     )

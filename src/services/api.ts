@@ -81,12 +81,12 @@ export const fetchDataUpdateUserById = (_id: string) => {
     return axios.get<IBackendRes<IModelPaginate<IUser>>>(urlBackend);
 }
 
-export const updateUser = (_id: string,name: string, age: number, gender: string, role: string) => {
+export const updateUser = (_id: string, name: string, age: number, gender: string, role: string) => {
     const urlBackend = `api/v1/users/${_id}`;
     const data = {
-       name: name, age: age, gender: gender, role: role
+        name: name, age: age, gender: gender, role: role
     }
-    return axios.patch<IBackendRes<IUser>>(urlBackend,data);
+    return axios.patch<IBackendRes<IUser>>(urlBackend, data);
 }
 
 
@@ -98,8 +98,8 @@ export const fetchAllCategory = (query: string) => {
 
 export const createCategory = (name: string, description: string) => {
     const urlBackend = "api/v1/categories";
-    const data = {name, description};
-    return axios.post<IBackendRes<ICategory>>(urlBackend,data);
+    const data = { name, description };
+    return axios.post<IBackendRes<ICategory>>(urlBackend, data);
 }
 
 export const deteleCategory = (_id: string) => {
@@ -117,13 +117,23 @@ export const updateCategory = (_id: string, name: string, description: string) =
     const data = {
         name: name, description: description,
     }
-    return axios.patch<IBackendRes<ICategory>>(urlBackend,data);
+    return axios.patch<IBackendRes<ICategory>>(urlBackend, data);
 }
 
 /// api with author
 export const fetchListAuthor = (query: string) => {
     const urlBackend = `api/v1/authors?${query}`;
     return axios.get<IBackendRes<IAuthor>>(urlBackend);
+}
+
+export const fetchAuthorById = (_id: string) => {
+    const urlBackend = `api/v1/authors/${_id}`;
+    return axios.get<IBackendRes<IAuthor>>(urlBackend);
+}
+
+export const deleteAuthor = (_id: string) => {
+    const urlBackend = `api/v1/authors/${_id}`;
+    return axios.delete<IBackendRes<IAuthor>>(urlBackend);
 }
 
 
