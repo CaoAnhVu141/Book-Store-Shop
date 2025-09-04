@@ -120,6 +120,12 @@ export const updateCategory = (_id: string, name: string, description: string) =
     return axios.patch<IBackendRes<ICategory>>(urlBackend,data);
 }
 
+/// api with author
+export const fetchListAuthor = (query: string) => {
+    const urlBackend = `api/v1/authors?${query}`;
+    return axios.get<IBackendRes<IAuthor>>(urlBackend);
+}
+
 
 
 

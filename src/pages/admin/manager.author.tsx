@@ -1,8 +1,10 @@
+import TableAuthor from "@/components/admin/author/table.author";
+
 const ManagerAuthorPage = () => {
     return(
-        <div>
-           ManagerAuthorPage
-        </div>
+        <>
+            <TableAuthor/>
+        </>
     )
 }
 

@@ -94,4 +94,12 @@ declare global {
         createdAt: Date;
         updatedAt: Date;
     }
+
+    interface IAuthor{
+        _id: string, 
+        name: string,
+        bio: string,
+        createdAt: Date;
+        updatedAt: Date;
+    }
 }
