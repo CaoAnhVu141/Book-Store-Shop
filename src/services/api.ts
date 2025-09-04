@@ -136,6 +136,12 @@ export const deleteAuthor = (_id: string) => {
     return axios.delete<IBackendRes<IAuthor>>(urlBackend);
 }
 
+export const createAuthor = (name: string, bio: string) => {
+    const urlBackend = `api/v1/authors`;
+    const data = { name, bio };
+    return axios.post<IBackendRes<IAuthor>>(urlBackend,data);
+}
+
 
 
 

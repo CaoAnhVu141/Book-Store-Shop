@@ -1,10 +1,11 @@
-import { fetchAuthorById, fetchListAuthor } from "@/services/api";
+import { deleteAuthor, fetchAuthorById, fetchListAuthor } from "@/services/api";
 import { DeleteOutlined, EditOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
 import { ProTable, type ProColumns } from "@ant-design/pro-components";
-import { Button, DatePicker, Popconfirm } from "antd";
+import { Button, DatePicker, message, Popconfirm } from "antd";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
 import DetailAuthor from "./detail.author";
+import CreateAuthor from "./create.author";
 
 
 const TableAuthor = () => {
@@ -28,8 +29,12 @@ const TableAuthor = () => {
 
 
     const [openDetailAuthor,setOpenDetailAuthor] = useState<boolean>(false);
-
     const [dataDetailAuthor, setDataDetailAuthor] = useState<IAuthor | null>(null);
+
+    // 
+    const [openCreateAuthor, setOpenCreateAuthor] = useState<boolean>(false);
+
+    const [messageApi, contextHolder] = message.useMessage();
 
     const columns: ProColumns<IModelPaginate>[] = [
         {
@@ -101,9 +106,9 @@ const TableAuthor = () => {
                     <div className='action-module'>
                         <Popconfirm
                             title="Xoá user"
-                            description="Bạn có muốn xoá user này"
+                            description="Bạn có muốn xoá author này"
                             onConfirm={() => {
-                                // handleDeleteCategory(record._id);
+                                handleDetele(record._id);
                             }}
                             // onCancel={cancel}
                             okText="Xác nhận"
@@ -122,6 +127,29 @@ const TableAuthor = () => {
             filters: true,
         },
     ];
+
+    // refresh sau khi tạo mới
+    const refreshTable = () => {
+        actionRef.current?.reload();
+    }
+
+    const handleDetele = async (_id: string) => {
+        const response = await deleteAuthor(_id);
+        if(response && response.data){
+            messageApi.open({
+                type: 'success',
+                content: 'Tạo mới thành công',
+            });
+            refreshTable()
+        }
+        else{
+            messageApi.open({
+                type: 'success',
+                content: response.message,
+            });
+        }
+    }
+
     return (
         <>
             <ProTable<IModelPaginate, TSearch>
@@ -137,7 +165,7 @@ const TableAuthor = () => {
                         query += `&name=${params.name}`;
                     }
                     if (params?.bio) {
-                        query += `&description=${params.bio}`;
+                        query += `&bio=${params.bio}`;
                     }
                     if (params?.startDate || params?.endDate) {
                         query += `&startDate=${params.startDate}&endDate=${params.endDate}`;
@@ -178,6 +206,9 @@ const TableAuthor = () => {
                     <Button
                         key="button"
                         icon={<PlusOutlined />}
+                        onClick={()=> {
+                            setOpenCreateAuthor(true);
+                        }}
                         type="primary">
                         Thêm mới
                     </Button>,
@@ -202,6 +233,11 @@ const TableAuthor = () => {
             setOpenDetailAuthor={setOpenDetailAuthor}
             dataDetailAuthor={dataDetailAuthor}
             setDataDetailAuthor={setDataDetailAuthor}
+            />
+            <CreateAuthor
+            openCreateAuthor={openCreateAuthor}
+            setOpenCreateAuthor={setOpenCreateAuthor}
+            refreshTable={refreshTable}
             />
         </>
     )

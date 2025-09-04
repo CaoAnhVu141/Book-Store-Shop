@@ -7,6 +7,7 @@ import { useState } from "react";
 interface IProp {
     openCreateCategory: boolean;
     setOpenCreateCategory: (v: boolean) => void;
+    refreshTable: () => void;
 }
 
 type FieldType = {
