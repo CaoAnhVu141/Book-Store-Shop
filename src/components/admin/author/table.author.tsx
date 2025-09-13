@@ -170,6 +170,17 @@ const TableAuthor = () => {
                     if (params?.startDate || params?.endDate) {
                         query += `&startDate=${params.startDate}&endDate=${params.endDate}`;
                     }
+
+                    // filter date and name ascend descend =======
+                    const sortFields: string[] = [];
+                    for (const key in sort) {
+                        if (sort[key] === 'ascend') sortFields.push(key);
+                        if (sort[key] === 'descend') sortFields.push(`-${key}`);
+                    }
+                    if (sortFields.length > 0) {
+                        query += `&sort=${sortFields.join(',')}`;
+                    }
+
                     const response = await fetchListAuthor(query);
                     if(response.data){
                         setMeta(response.data.meta);

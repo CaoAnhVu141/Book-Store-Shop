@@ -142,6 +142,11 @@ export const createAuthor = (name: string, bio: string) => {
     return axios.post<IBackendRes<IAuthor>>(urlBackend,data);
 }
 
+/// api with coupon
+export const fetchListCoupon = (query: string) => {
+    const urlBackend = `api/v1/coupon?${query}`;
+    return axios.get<IBackendRes<ICoupon>>(urlBackend);
+}
 
 
 

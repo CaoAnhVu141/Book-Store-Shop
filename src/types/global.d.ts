@@ -102,4 +102,15 @@ declare global {
         createdAt: Date;
         updatedAt: Date;
     }
+
+    interface ICoupon{
+        _id: string, 
+        name: string,
+        code: string,
+        discounType: string;
+        discounValue: number;
+        startDate: Date;
+        endDate: Date;
+        status: boolean;
+    }
 }

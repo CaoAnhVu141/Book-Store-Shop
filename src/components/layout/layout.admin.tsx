@@ -40,7 +40,7 @@ const LayoutAdmin = () => {
 
         },
         {
-            label: <span>Manage Users</span>,
+            label: <span>User</span>,
             key: '/admin/user',
             icon: <UserOutlined />,
             children: [
@@ -52,23 +52,28 @@ const LayoutAdmin = () => {
             ]
         },
         {
-            label: <Link to='/admin/book'>Manage Books</Link>,
+            label: <Link to='/admin/book'>Books</Link>,
             key: '/admin/book',
             icon: <ExceptionOutlined />
         },
         {
-            label: <Link to='/admin/order'>Manage Orders</Link>,
+            label: <Link to='/admin/order'>Orders</Link>,
             key: '/admin/order',
             icon: <DollarCircleOutlined />
         },
         {
-            label: <Link to='/admin/category'>Manage Category</Link>,
+            label: <Link to='/admin/category'>Category</Link>,
             key: '/admin/category',
             icon: <ProfileOutlined />
         },
         {
-            label: <Link to='/admin/author'>Manage Author</Link>,
+            label: <Link to='/admin/author'>Author</Link>,
             key: '/admin/author',
+            icon: <ProfileOutlined />
+        },
+        {
+            label: <Link to='/admin/coupon'>Coupon</Link>,
+            key: '/admin/coupon',
             icon: <ProfileOutlined />
         },
 
@@ -155,8 +160,8 @@ const LayoutAdmin = () => {
                     collapsible
                     collapsed={collapsed}
                     onCollapse={(value) => setCollapsed(value)}>
-                    <div style={{ height: 32, margin: 16, textAlign: 'center' }}>
-                        Admin
+                    <div style={{ height: 32, margin: 16, textAlign: 'center', fontSize: "16px" }}>
+                        Ruồi Book Shop
                     </div>
                     <Menu
                         // defaultSelectedKeys={[activeMenu]}
