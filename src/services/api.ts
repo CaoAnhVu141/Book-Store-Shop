@@ -151,7 +151,11 @@ export const fetchListCoupon = (query: string) => {
 export const fetchCouponById = (_id: string) => {
     const urlBackend = `api/v1/coupon/${_id}`;
     return axios.get<IBackendRes<ICoupon>>(urlBackend);
+}
 
+export const deleteCoupon = (_id: string) => {
+    const urlBackend = `api/v1/coupon/${_id}`;
+    return axios.delete<IBackendRes<IAuthor>>(urlBackend);
 }
 
 

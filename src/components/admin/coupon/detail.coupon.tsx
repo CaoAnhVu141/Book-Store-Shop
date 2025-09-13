@@ -41,7 +41,6 @@ const DetailCoupon = (props: IProp) => {
                     <Descriptions.Item label="Tiền giảm">
                         {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(dataDetailCoupon?.discounValue)}
                     </Descriptions.Item>
-
                 </Descriptions>;
             </Drawer>
         </>

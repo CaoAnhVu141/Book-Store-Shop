@@ -1,4 +1,4 @@
-import { fetchCouponById, fetchListCoupon } from "@/services/api";
+import { deleteCoupon, fetchCouponById, fetchListCoupon } from "@/services/api";
 import { DeleteOutlined, EditOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
 import { ProTable, type ActionType, type ProColumns } from "@ant-design/pro-components";
 import { Button, DatePicker, message, Popconfirm } from "antd";
@@ -140,18 +140,18 @@ const TableCoupon = () => {
             render: (_, record) => (
                 <>
                     <div className='action-module'>
-                        {/* <Popconfirm
+                        <Popconfirm
                             title="Xoá user"
-                            description="Bạn có muốn xoá author này"
+                            description="Bạn có muốn xoá coupon này"
                             onConfirm={() => {
-                                handleDetele(record._id);
+                                handleDelete(record._id);
                             }}
                             // onCancel={cancel}
                             okText="Xác nhận"
                             cancelText="No"
                         >
                             <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
-                        </Popconfirm> */}
+                        </Popconfirm>
                         <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }}
                         // onClick={async () => {
                         //     const response = await fetchCategoryById(record._id);
@@ -168,6 +168,23 @@ const TableCoupon = () => {
         actionRef.current?.reload();
     }
 
+    const handleDelete = async (_id: string) => {
+        const response = await deleteCoupon(_id);
+        if (response && response.data) {
+            messageApi.open({
+                type: 'success',
+                content: 'Xoá thành công',
+            });
+            refreshTable();
+        }
+        else {
+            messageApi.open({
+                type: 'success',
+                content: response.message,
+            });
+        }
+    }
+
 
 
     return (
@@ -181,7 +198,7 @@ const TableCoupon = () => {
                     if (params) {
                         query += `current=${params.current}&pageSize=${params.pageSize}`
                     }
-                    
+
 
                     // filter date and name ascend descend =======
                     const sortFields: string[] = [];
@@ -252,10 +269,10 @@ const TableCoupon = () => {
                 ]}
             />
             <DetailCoupon
-            openDetailCoupon={openDetailCoupon}
-            setOpenDetailCoupon={setOpenDetailCoupon}
-            dataDetailCoupon={dataDetailCoupon}
-            setDataDetailCoupon={setDataDetailCoupon}
+                openDetailCoupon={openDetailCoupon}
+                setOpenDetailCoupon={setOpenDetailCoupon}
+                dataDetailCoupon={dataDetailCoupon}
+                setDataDetailCoupon={setDataDetailCoupon}
             />
         </>
     )
