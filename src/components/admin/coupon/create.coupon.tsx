@@ -2,6 +2,7 @@ import { createCoupon } from "@/services/api";
 import { Input, message, Modal, Form, DatePicker, Switch } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import type { FormProps } from "antd/lib";
+import { useState } from "react";
 
 
 interface IPops {
@@ -26,9 +27,11 @@ const CreateCoupon = (props: IPops) => {
     const { openCreateCoupon, setOpenCreateCoupon, refreshTable } = props;
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
+    const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
 
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        setIsSubmit(true);
         const { code, name, discounType, discounValue, startDate, endDate, status } = values;
         const response = await createCoupon(code, name, discounType, discounValue, startDate, endDate, status);
         if (response && response.data) {
@@ -39,6 +42,7 @@ const CreateCoupon = (props: IPops) => {
             form.resetFields();
             setOpenCreateCoupon(false);
             refreshTable();
+            
         }
         else {
             messageApi.open({
@@ -46,7 +50,7 @@ const CreateCoupon = (props: IPops) => {
                 content: response.message,
             });
         }
-
+        setIsSubmit(false);
     }
 
     const handleCanel = () => {
@@ -65,7 +69,7 @@ const CreateCoupon = (props: IPops) => {
                     handleCanel();
                     form.resetFields();
                 }}
-            // confirmLoading={isSubmit}
+            confirmLoading={isSubmit}
             >
                 <div style={{ display: "flex", left: "10px" }}>
                     <Form
