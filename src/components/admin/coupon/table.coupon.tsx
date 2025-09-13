@@ -5,6 +5,7 @@ import { Button, DatePicker, message, Popconfirm } from "antd";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
 import DetailCoupon from "./detail.coupon";
+import CreateCoupon from "./create.coupon";
 
 const TableCoupon = () => {
 
@@ -30,6 +31,8 @@ const TableCoupon = () => {
 
     const [openDetailCoupon, setOpenDetailCoupon] = useState<boolean>(false);
     const [dataDetailCoupon, setDataDetailCoupon] = useState<ICoupon | null>(null);
+
+    const [openCreateCoupon, setOpenCreateCoupon] = useState<boolean>(false);
 
 
     const columns: ProColumns<IModelPaginate>[] = [
@@ -246,9 +249,9 @@ const TableCoupon = () => {
                     <Button
                         key="button"
                         icon={<PlusOutlined />}
-                        // onClick={() => {
-                        //     setOpenCreateAuthor(true);
-                        // }}
+                        onClick={() => {
+                            setOpenCreateCoupon(true);
+                        }}
                         type="primary">
                         Thêm mới
                     </Button>,
@@ -274,6 +277,12 @@ const TableCoupon = () => {
                 dataDetailCoupon={dataDetailCoupon}
                 setDataDetailCoupon={setDataDetailCoupon}
             />
+            <CreateCoupon
+                openCreateCoupon={openCreateCoupon}
+                setOpenCreateCoupon={setOpenCreateCoupon}
+                refreshTable={refreshTable}
+            />
+
         </>
     )
 }

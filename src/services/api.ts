@@ -155,7 +155,13 @@ export const fetchCouponById = (_id: string) => {
 
 export const deleteCoupon = (_id: string) => {
     const urlBackend = `api/v1/coupon/${_id}`;
-    return axios.delete<IBackendRes<IAuthor>>(urlBackend);
+    return axios.delete<IBackendRes<ICoupon>>(urlBackend);
+}
+
+export const createCoupon = (code: string, name: string, discounType: string, discounValue: number, startDate: Date, endDate: Date, status: boolean) => {
+    const urlBackend = `api/v1/coupon`;
+    const data = { code, name, discounType, discounValue, startDate, endDate, status };
+    return axios.post<IBackendRes<ICoupon>>(urlBackend,data);
 }
 
 
