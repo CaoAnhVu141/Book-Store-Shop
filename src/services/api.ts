@@ -164,4 +164,12 @@ export const createCoupon = (code: string, name: string, discounType: string, di
     return axios.post<IBackendRes<ICoupon>>(urlBackend,data);
 }
 
+export const updateCoupon = (_id: string, code: string, name: string, discounType: string, discounValue: number, startDate: Date, endDate: Date, status: boolean) => {
+    const urlBackend = `api/v1/coupon/${_id}`;
+    const data = {
+        code: code, name: name, discounType: discounType, discounValue: discounValue, startDate: startDate, endDate: endDate, status: status,
+    }
+    return axios.patch<IBackendRes<ICoupon>>(urlBackend, data);
+}
+
 

@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { useRef, useState } from "react";
 import DetailCoupon from "./detail.coupon";
 import CreateCoupon from "./create.coupon";
+import UpdateCoupon from "./update.coupon";
 
 const TableCoupon = () => {
 
@@ -21,8 +22,11 @@ const TableCoupon = () => {
 
 
     type TSearch = {
+        code: string;
         name: string,
-        bio: string,
+        discounType: string,
+        discounValue: number,
+        status: boolean,
         startDate: string,
         endDate: string,
     };
@@ -33,6 +37,9 @@ const TableCoupon = () => {
     const [dataDetailCoupon, setDataDetailCoupon] = useState<ICoupon | null>(null);
 
     const [openCreateCoupon, setOpenCreateCoupon] = useState<boolean>(false);
+
+    const [openUpdateCoupon, setOpenUpdateCoupon] = useState<boolean>(false);
+    const [dataUpdateCoupon, setDataUpdateCoupon] = useState<ICategory | null>(null);
 
 
     const columns: ProColumns<IModelPaginate>[] = [
@@ -156,9 +163,11 @@ const TableCoupon = () => {
                             <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
                         </Popconfirm>
                         <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }}
-                        // onClick={async () => {
-                        //     const response = await fetchCategoryById(record._id);
-                        //     setDataUpdateCategory(response.data); setOpenUpdateCategory(true) }}
+                            onClick={async () => {
+                                const response = await fetchCouponById(record._id);
+                                setDataUpdateCoupon(response.data);
+                                setOpenUpdateCoupon(true)
+                            }}
                         />
                     </div>
                 </>
@@ -189,7 +198,6 @@ const TableCoupon = () => {
     }
 
 
-
     return (
         <>
             <ProTable<IModelPaginate, TSearch>
@@ -200,6 +208,15 @@ const TableCoupon = () => {
                     let query = "";
                     if (params) {
                         query += `current=${params.current}&pageSize=${params.pageSize}`
+                    }
+                    if (params?.code) {
+                        query += `&code=${params.code}`;
+                    }
+                    if (params?.name) {
+                        query += `&name=${params.name}`;
+                    }
+                    if (params?.discounType) {
+                        query += `&discounType=${params.discounType}`;
                     }
 
 
@@ -244,11 +261,12 @@ const TableCoupon = () => {
                     // showSizeChanger: true,
                     total: meta.total,
                 }}
-                headerTitle="Table user"
+                headerTitle="Danh sách"
                 toolBarRender={() => [
                     <Button
                         key="button"
                         icon={<PlusOutlined />}
+                        style={{ backgroundColor: '#7d7dfaff' }}
                         onClick={() => {
                             setOpenCreateCoupon(true);
                         }}
@@ -258,14 +276,14 @@ const TableCoupon = () => {
                     <Button
                         key="button"
                         icon={<ImportOutlined />}
-
+                        style={{ backgroundColor: '#7d7dfaff' }}
                         type="primary">
                         Import
                     </Button>,
                     <Button
                         key="button"
                         icon={<ImportOutlined />}
-
+                        style={{ backgroundColor: '#7d7dfaff' }}
                         type="primary">
                         Export
                     </Button>
@@ -282,7 +300,13 @@ const TableCoupon = () => {
                 setOpenCreateCoupon={setOpenCreateCoupon}
                 refreshTable={refreshTable}
             />
-
+            <UpdateCoupon
+                openUpdateCoupon={openUpdateCoupon}
+                setOpenUpdateCoupon={setOpenUpdateCoupon}
+                dataUpdateCoupon={dataUpdateCoupon}
+                setDataUpdateCoupon={setDataUpdateCoupon}
+                refreshTable={refreshTable}
+            />
         </>
     )
 }

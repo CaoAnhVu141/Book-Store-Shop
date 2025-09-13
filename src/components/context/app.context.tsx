@@ -59,7 +59,7 @@ export const AppProvider = (props: IProps) => {
             height={35}
             aria-label="Loading Spinner"
             data-testid="loader"
-            color='#92A5FD'
+            color='#7d7dfaff'
           />
         </div>
       }
