@@ -1,9 +1,10 @@
-import { fetchListCoupon } from "@/services/api";
+import { fetchCouponById, fetchListCoupon } from "@/services/api";
 import { DeleteOutlined, EditOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
 import { ProTable, type ActionType, type ProColumns } from "@ant-design/pro-components";
 import { Button, DatePicker, message, Popconfirm } from "antd";
 import dayjs from "dayjs";
 import { useRef, useState } from "react";
+import DetailCoupon from "./detail.coupon";
 
 const TableCoupon = () => {
 
@@ -27,6 +28,10 @@ const TableCoupon = () => {
 
     const [messageApi, contextHolder] = message.useMessage();
 
+    const [openDetailCoupon, setOpenDetailCoupon] = useState<boolean>(false);
+    const [dataDetailCoupon, setDataDetailCoupon] = useState<ICoupon | null>(null);
+
+
     const columns: ProColumns<IModelPaginate>[] = [
         {
             dataIndex: 'index',
@@ -42,11 +47,11 @@ const TableCoupon = () => {
             render(dom, entity, index, action, schema) {
                 return (
                     <a
-                        // onClick={async () => {
-                        //     const response = await fetchAuthorById(entity._id);
-                        //     setDataDetailAuthor(response.data);
-                        //     setOpenDetailAuthor(true);
-                        // }}
+                        onClick={async () => {
+                            const response = await fetchCouponById(entity._id);
+                            setOpenDetailCoupon(true);
+                            setDataDetailCoupon(response.data);
+                        }}
                         href="#">{entity._id}</a>
                 )
             },
@@ -246,7 +251,12 @@ const TableCoupon = () => {
                     </Button>
                 ]}
             />
-
+            <DetailCoupon
+            openDetailCoupon={openDetailCoupon}
+            setOpenDetailCoupon={setOpenDetailCoupon}
+            dataDetailCoupon={dataDetailCoupon}
+            setDataDetailCoupon={setDataDetailCoupon}
+            />
         </>
     )
 }

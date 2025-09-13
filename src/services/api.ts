@@ -148,5 +148,10 @@ export const fetchListCoupon = (query: string) => {
     return axios.get<IBackendRes<ICoupon>>(urlBackend);
 }
 
+export const fetchCouponById = (_id: string) => {
+    const urlBackend = `api/v1/coupon/${_id}`;
+    return axios.get<IBackendRes<ICoupon>>(urlBackend);
+
+}
 
 
