@@ -120,4 +120,12 @@ declare global {
         description: string;
         status: boolean;
     }
+
+    interface IWareHouse{
+        _id: string, 
+        name: string,
+        description: string;
+        location: string;
+        status: boolean;
+    }
 }

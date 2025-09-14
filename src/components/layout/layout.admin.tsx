@@ -81,6 +81,11 @@ const LayoutAdmin = () => {
             key: '/admin/payment',
             icon: <ProfileOutlined />
         },
+        {
+            label: <Link to='/admin/warehouse'>WareHouse</Link>,
+            key: '/admin/warehouse',
+            icon: <ProfileOutlined />
+        },
 
     ];
 

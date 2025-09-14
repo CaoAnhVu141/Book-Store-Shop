@@ -26,7 +26,6 @@ type FieldType = {
     name: string,
     description: string,
     status: boolean,
-    fullAddress: string;
     startDate: Date,
     endDate: Date;
     street?: string;
@@ -36,7 +35,7 @@ type FieldType = {
 
 const CreateWareHouse = (props: IProp) => {
 
-    const { openCreateWareHouse, setOpenCreateWareHouse } = props;
+    const { openCreateWareHouse, setOpenCreateWareHouse,refreshTable } = props;
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -71,19 +70,17 @@ const CreateWareHouse = (props: IProp) => {
         }
     }
 
-
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         setIsSubmit(true);
         // thực thi tìm tên phường
         const selectedProvince = provinces.find(p => p.code === values.province);
         const selectedWard = wards.find(w => w.code === values.ward);
 
-        // tạo ob kết quả 
-        const fullAddress = `${values.street}, ${selectedWard?.name}, ${selectedProvince?.name}`;
-
+        //tạo location đầy đủ
+        const location = `${values.street}, ${selectedWard?.name}, ${selectedProvince?.name}`;
 
         const { name, description, status } = values;
-        const response = await createWareHouse(name, description, fullAddress, status);
+        const response = await createWareHouse(name, description, location, status);
         if (response && response.data) {
             messageApi.open({
                 type: 'success',
@@ -91,6 +88,7 @@ const CreateWareHouse = (props: IProp) => {
             });
             form.resetFields();
             setOpenCreateWareHouse(false);
+            refreshTable();
         }
         else {
             messageApi.open({
@@ -132,77 +130,75 @@ const CreateWareHouse = (props: IProp) => {
                             name="name"
                             rules={[{ required: true, message: 'Vui lòng nhập tên kho!' }]}
                         >
-                            <Input />
+                            <Input style={{
+                                width: "250px",
+                                padding: "5px 5px"
+                            }} />
                         </Form.Item>
                         <Form.Item<FieldType>
                             label="Mô tả"
                             name="description"
                             rules={[{ required: true, message: 'Vui lòng nhập mô tả' }]}
                         >
-                            <TextArea rows={4} />
+                            <TextArea style={{
+                                width: "300px",
+                                padding: "5px 5px"
+                            }} />
                         </Form.Item>
-
-                        <Col span={20}>
-                            <Form.Item
-                                label="Tỉnh/Thành phố"
-                                name="province"
-                                rules={[{ required: true, message: 'Chọn tỉnh!' }]}
-                            >
-                                <Select
-                                    placeholder="Chọn tỉnh"
-                                    onChange={fetchWards}
-                                    showSearch
-                                    style={{
-                                        width: "200px",
-                                        height: "50px",
-                                        padding: "5px 5px"
-                                    }}
-                                >
-                                    {provinces.map(province => (
-                                        <Option key={province.code} value={province.code}>
-                                            {province.name}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-
-                        <Col span={20}>
-                            <Form.Item
-                                label="Phường/Xã"
-                                name="ward"
-                                rules={[{ required: true, message: 'Chọn phường!' }]}
-                            >
-                                <Select
-                                    placeholder="Chọn phường"
-                                    disabled={wards.length === 0}
-                                    showSearch
-                                    style={{
-                                        width: "200px",
-                                        height: "50px",
-                                        padding: "5px 5px"
-                                    }}
-                                >
-                                    {wards.map(ward => (
-                                        <Option key={ward.code} value={ward.code}>
-                                            {ward.name}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                        <Col span={12}>
-                            <Form.Item
-                                label="Tên đường"
-                                name="street"
-                                rules={[{ required: true, message: 'Nhập tên đường!' }]}
-                            >
-                                <Input style={{
-                                    width: "250px",
+                        <Form.Item
+                            label="Tỉnh"
+                            name="province"
+                            rules={[{ required: true, message: 'Chọn tỉnh!' }]}
+                        >
+                            <Select
+                                placeholder="Chọn tỉnh"
+                                onChange={fetchWards}
+                                showSearch
+                                style={{
+                                    width: "200px",
+                                    height: "50px",
                                     padding: "5px 5px"
-                                }} />
-                            </Form.Item>
-                        </Col>
+                                }}
+                            >
+                                {provinces.map(province => (
+                                    <Option key={province.code} value={province.code}>
+                                        {province.name}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="Phường/Xã"
+                            name="ward"
+                            rules={[{ required: true, message: 'Chọn phường!' }]}
+                        >
+                            <Select
+                                placeholder="Phường/Xã"
+                                disabled={wards.length === 0}
+                                showSearch
+                                style={{
+                                    width: "200px",
+                                    height: "50px",
+                                    padding: "5px 5px"
+                                }}
+                            >
+                                {wards.map(ward => (
+                                    <Option key={ward.code} value={ward.code}>
+                                        {ward.name}
+                                    </Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="Tên đường"
+                            name="street"
+                            rules={[{ required: true, message: 'Nhập tên đường!' }]}
+                        >
+                            <Input style={{
+                                width: "250px",
+                                padding: "5px 5px"
+                            }} />
+                        </Form.Item>
                         <Form.Item<FieldType>
                             label="Trạng thái"
                             name="status"

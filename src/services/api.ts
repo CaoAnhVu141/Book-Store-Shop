@@ -194,3 +194,26 @@ export const createPayment = ( name: string, description: string,status: boolean
     return axios.post<IBackendRes<IPayment>>(urlBackend,data);
 }
 
+/// api with warehouse
+
+export const fetchListWareHouse = (query: string) => {
+    const urlBackend = `api/v1/warehouse?${query}`;
+    return axios.get<IBackendRes<IWareHouse>>(urlBackend);
+}
+
+export const deleteWareHouse = (_id: string) => {
+    const urlBackend = `api/v1/warehouse/${_id}`;
+    return axios.delete<IBackendRes<IWareHouse>>(urlBackend);
+}
+
+export const fetchWareHouseById = (_id: string) => {
+    const urlBackend = `api/v1/warehouse/${_id}`;
+    return axios.get<IBackendRes<IWareHouse>>(urlBackend);
+}
+
+export const createWareHouse = ( name: string, description: string,location: string,status: boolean) => {
+    const urlBackend = `api/v1/warehouse`;
+    const data = { name, description,location, status };
+    return axios.post<IBackendRes<IWareHouse>>(urlBackend,data);
+}
+
