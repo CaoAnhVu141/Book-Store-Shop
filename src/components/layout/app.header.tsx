@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router';
 import './app.header.scss';
 import { Link } from 'react-router-dom';
 import { useCurrentApp } from 'components/context/app.context';
-import { loginAPI, logoutAPI } from '@/services/api';
+import { checkInUser, loginAPI, logoutAPI } from '@/services/api';
+import { jwtDecode } from "jwt-decode";
 // import { logoutAPI } from '@/services/api';
 // import ManageAccount from '../client/account';
 // import { isMobile } from 'react-device-detect';
@@ -30,7 +31,7 @@ const AppHeader = () => {
 
     const handleLogout = async () => {
         const response = await logoutAPI();
-        if(response.data){
+        if (response.data) {
             messageApi.open({
                 type: 'success',
                 content: 'Đăng xuất thành công',
@@ -39,10 +40,37 @@ const AppHeader = () => {
             setIsAuthenticated(false);
             localStorage.removeItem("access_token");
         }
-        else{
+        else {
             messageApi.open({
                 type: 'error',
                 content: 'Đăng xuất thất bại',
+            });
+        }
+    }
+
+    const handleCheckIn = async () => {
+        try {
+            const token = localStorage.getItem("access_token");
+            const tokenDecoded = jwtDecode(token);
+            const user = tokenDecoded._id;
+            const response = await checkInUser(user);
+            if (response && response.success) {
+                messageApi.open({
+                    type: 'success',
+                    content: 'Điểm danh thành công',
+                });
+            }
+            else {
+                messageApi.open({
+                    type: 'error',
+                    content: response.data.message,
+                });
+            }
+        }
+        catch (error: any) {
+            messageApi.open({
+                type: 'error',
+                content: "Đã có lỗi khi điểm danh",
             });
         }
     }
@@ -54,6 +82,13 @@ const AppHeader = () => {
                 onClick={() => setOpenManageAccount(true)}
             >Quản lý tài khoản</label>,
             key: 'account',
+        },
+        {
+            label: <label
+                style={{ cursor: 'pointer' }}
+                onClick={() => handleCheckIn()}
+            >Điểm danh</label>,
+            key: 'point',
         },
         {
             label: <Link to="/history">Lịch sử mua hàng</Link>,

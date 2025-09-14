@@ -217,3 +217,8 @@ export const createWareHouse = ( name: string, description: string,location: str
     return axios.post<IBackendRes<IWareHouse>>(urlBackend,data);
 }
 
+export const checkInUser = (user: string) => {
+    const urlBackend = `/api/v1/point`;
+    const data = {user: user}
+    return axios.post(urlBackend,data);
+}
