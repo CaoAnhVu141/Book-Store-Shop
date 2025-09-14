@@ -49,6 +49,7 @@ const CreateWareHouse = (props: IProp) => {
         }
     }, [openCreateWareHouse]);
 
+    ///function Province
     const fetchProvinces = async () => {
         try {
             const response = await fetch('https://provinces.open-api.vn/api/v2/');
@@ -59,6 +60,8 @@ const CreateWareHouse = (props: IProp) => {
         }
     }
 
+
+    // function Wards
     const fetchWards = async (provinceCode: number) => {
         try {
             const response = await fetch(`https://provinces.open-api.vn/api/v2/p/${provinceCode}?depth=2`);
@@ -89,6 +92,7 @@ const CreateWareHouse = (props: IProp) => {
             form.resetFields();
             setOpenCreateWareHouse(false);
             refreshTable();
+            setIsSubmit(false);
         }
         else {
             messageApi.open({
@@ -96,6 +100,7 @@ const CreateWareHouse = (props: IProp) => {
                 content: response.message,
             });
         }
+        setIsSubmit(false);
     }
 
     const handleCanel = () => {

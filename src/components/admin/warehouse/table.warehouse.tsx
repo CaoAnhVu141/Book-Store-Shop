@@ -3,8 +3,9 @@ import { Button, DatePicker, message, Popconfirm } from "antd";
 import { useRef, useState } from "react";
 import dayjs from "dayjs";
 import { DeleteOutlined, EditOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
-import { deleteWareHouse, fetchListWareHouse } from "@/services/api";
+import { deleteWareHouse, fetchListWareHouse, fetchWareHouseById } from "@/services/api";
 import CreateWareHouse from "./create.warehouse";
+import DetailWareHouse from "./detail.warehouse";
 
 const TableWareHouse = () => {
 
@@ -31,6 +32,8 @@ const TableWareHouse = () => {
     const [messageApi, contextHolder] = message.useMessage();
 
     const [openCreateWareHouse, setOpenCreateWareHouse] = useState<boolean>(false);
+    const [openDetailWareHouse, setOpenDetailWareHouse] = useState<boolean>(false);
+    const [dataDetailWareHouse, setDataDetailWareHouse] = useState<IWareHouse | null>(null);
 
     const columns: ProColumns<IModelPaginate>[] = [
         {
@@ -47,6 +50,11 @@ const TableWareHouse = () => {
             render(dom, entity, index, action, schema) {
                 return (
                     <a
+                        onClick={async () => {
+                            const response = await fetchWareHouseById(entity._id);
+                            setOpenDetailWareHouse(true);
+                            setDataDetailWareHouse(response.data);
+                        }}
                         href="#">{entity._id}</a>
                 )
             },
@@ -236,6 +244,12 @@ const TableWareHouse = () => {
             openCreateWareHouse={openCreateWareHouse}
             setOpenCreateWareHouse={setOpenCreateWareHouse}
             refreshTable={refreshTable}
+            />
+            <DetailWareHouse
+            openDetailWareHouse={openDetailWareHouse}
+            setOpenDetailWareHouse={setOpenDetailWareHouse}
+            dataDetailWareHouse={dataDetailWareHouse}
+            setDataDetailWareHouse={setDataDetailWareHouse}
             />
         </>
     )
