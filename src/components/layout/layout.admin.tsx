@@ -76,6 +76,11 @@ const LayoutAdmin = () => {
             key: '/admin/coupon',
             icon: <ProfileOutlined />
         },
+        {
+            label: <Link to='/admin/payment'>Payment</Link>,
+            key: '/admin/payment',
+            icon: <ProfileOutlined />
+        },
 
     ];
 

@@ -172,4 +172,25 @@ export const updateCoupon = (_id: string, code: string, name: string, discounTyp
     return axios.patch<IBackendRes<ICoupon>>(urlBackend, data);
 }
 
+/// api with coupon
+export const fetchListPayment = (query: string) => {
+    const urlBackend = `api/v1/payment?${query}`;
+    return axios.get<IBackendRes<IPayment>>(urlBackend);
+}
+
+export const deletePayment = (_id: string) => {
+    const urlBackend = `api/v1/payment/${_id}`;
+    return axios.delete<IBackendRes<IPayment>>(urlBackend);
+}
+
+export const fetchPaymentById = (_id: string) => {
+    const urlBackend = `api/v1/payment/${_id}`;
+    return axios.get<IBackendRes<IPayment>>(urlBackend);
+}
+
+export const createPayment = ( name: string, description: string,status: boolean) => {
+    const urlBackend = `api/v1/payment`;
+    const data = { name, description, status };
+    return axios.post<IBackendRes<IPayment>>(urlBackend,data);
+}
 

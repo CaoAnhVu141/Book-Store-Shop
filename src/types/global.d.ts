@@ -113,4 +113,11 @@ declare global {
         endDate: Date;
         status: boolean;
     }
+
+    interface IPayment{
+        _id: string, 
+        name: string,
+        description: string;
+        status: boolean;
+    }
 }

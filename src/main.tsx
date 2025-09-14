@@ -23,6 +23,7 @@ import ManagerUserPage from './pages/admin/manager.user';
 import ManagerCategoryPage from './pages/admin/manager.category';
 import ManagerAuthorPage from './pages/admin/manager.author';
 import ManagerCouponPage from './pages/admin/manager.coupon';
+import ManagerPaymentPage from './pages/admin/manager.payment';
 
 const router = createBrowserRouter([
   {
@@ -109,6 +110,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <ManagerCouponPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "payment",
+        element: (
+          <ProtectedRoute>
+            <ManagerPaymentPage />
           </ProtectedRoute>
         ),
       },
