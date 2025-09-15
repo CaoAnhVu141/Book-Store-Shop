@@ -222,3 +222,14 @@ export const checkInUser = (user: string) => {
     const data = {user: user}
     return axios.post(urlBackend,data);
 }
+
+/// api with author
+export const fetchListBook = (query: string) => {
+    const urlBackend = `api/v1/books?${query}`;
+    return axios.get<IBackendRes<IBook>>(urlBackend);
+}
+
+export const fetchBookById = (_id: string) => {
+    const urlBackend = `api/v1/books/${_id}`;
+    return axios.get<IBackendRes<IBook>>(urlBackend);
+}

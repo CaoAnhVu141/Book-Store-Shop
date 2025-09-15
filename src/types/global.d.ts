@@ -128,4 +128,16 @@ declare global {
         location: string;
         status: boolean;
     }
+
+    interface IBook{
+        _id: string, 
+        name: string,
+        description: string;
+        price: number;
+        stock: number;
+        author: {
+            _id: string;
+            name: string;
+        };
+    }
 }

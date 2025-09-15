@@ -1,8 +1,8 @@
+import TableBook from "@/components/book/table.book";
+
 const ManagerBookPage = () => {
     return(
-        <div>
-           ManagerBookPage
-        </div>
+        <TableBook/>
     )
 }
 

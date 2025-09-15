@@ -54,7 +54,7 @@ const AppHeader = () => {
             const tokenDecoded = jwtDecode(token);
             const user = tokenDecoded._id;
             const response = await checkInUser(user);
-            if (response && response.success) {
+            if (response && response.data && response.data.success !== false) {
                 messageApi.open({
                     type: 'success',
                     content: 'Điểm danh thành công',
@@ -63,7 +63,7 @@ const AppHeader = () => {
             else {
                 messageApi.open({
                     type: 'error',
-                    content: response.data.message,
+                    content: response?.data?.message || 'Điểm danh thất bại',
                 });
             }
         }
