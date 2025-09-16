@@ -139,7 +139,7 @@ export const deleteAuthor = (_id: string) => {
 export const createAuthor = (name: string, bio: string) => {
     const urlBackend = `api/v1/authors`;
     const data = { name, bio };
-    return axios.post<IBackendRes<IAuthor>>(urlBackend,data);
+    return axios.post<IBackendRes<IAuthor>>(urlBackend, data);
 }
 
 /// api with coupon
@@ -161,7 +161,7 @@ export const deleteCoupon = (_id: string) => {
 export const createCoupon = (code: string, name: string, discounType: string, discounValue: number, startDate: Date, endDate: Date, status: boolean) => {
     const urlBackend = `api/v1/coupon`;
     const data = { code, name, discounType, discounValue, startDate, endDate, status };
-    return axios.post<IBackendRes<ICoupon>>(urlBackend,data);
+    return axios.post<IBackendRes<ICoupon>>(urlBackend, data);
 }
 
 export const updateCoupon = (_id: string, code: string, name: string, discounType: string, discounValue: number, startDate: Date, endDate: Date, status: boolean) => {
@@ -188,10 +188,10 @@ export const fetchPaymentById = (_id: string) => {
     return axios.get<IBackendRes<IPayment>>(urlBackend);
 }
 
-export const createPayment = ( name: string, description: string,status: boolean) => {
+export const createPayment = (name: string, description: string, status: boolean) => {
     const urlBackend = `api/v1/payment`;
     const data = { name, description, status };
-    return axios.post<IBackendRes<IPayment>>(urlBackend,data);
+    return axios.post<IBackendRes<IPayment>>(urlBackend, data);
 }
 
 /// api with warehouse
@@ -211,16 +211,16 @@ export const fetchWareHouseById = (_id: string) => {
     return axios.get<IBackendRes<IWareHouse>>(urlBackend);
 }
 
-export const createWareHouse = ( name: string, description: string,location: string,status: boolean) => {
+export const createWareHouse = (name: string, description: string, location: string, status: boolean) => {
     const urlBackend = `api/v1/warehouse`;
-    const data = { name, description,location, status };
-    return axios.post<IBackendRes<IWareHouse>>(urlBackend,data);
+    const data = { name, description, location, status };
+    return axios.post<IBackendRes<IWareHouse>>(urlBackend, data);
 }
 
 export const checkInUser = (user: string) => {
     const urlBackend = `/api/v1/point`;
-    const data = {user: user}
-    return axios.post(urlBackend,data);
+    const data = { user: user }
+    return axios.post(urlBackend, data);
 }
 
 /// api with author
@@ -232,4 +232,9 @@ export const fetchListBook = (query: string) => {
 export const fetchBookById = (_id: string) => {
     const urlBackend = `api/v1/books/${_id}`;
     return axios.get<IBackendRes<IBook>>(urlBackend);
+}
+
+export const deleteBook = (_id: string) => {
+    const urlBackend = `api/v1/books/${_id}`;
+    return axios.delete<IBackendRes<IWareHouse>>(urlBackend);
 }

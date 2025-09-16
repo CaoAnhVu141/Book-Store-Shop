@@ -1,4 +1,4 @@
-import { Descriptions, Drawer } from "antd";
+import { Col, Descriptions, Drawer, Image, Row } from "antd";
 import dayjs from "dayjs";
 
 interface IProp {
@@ -15,6 +15,11 @@ const DetailBook = (props: IProp) => {
         setOpenDetailBook(false);
         setDataDetailBook(null);
     }
+
+    const urlThumbnail = `${import.meta.env.VITE_BACKEND_URL}/images/book/${dataDetailBook?.thumbnail}`;
+    const urlImages = dataDetailBook?.images.map(images =>
+        `${import.meta.env.VITE_BACKEND_URL}/images/book/${images}`
+    ) || [];
 
     return (
         <>
@@ -36,9 +41,25 @@ const DetailBook = (props: IProp) => {
                     <Descriptions.Item label="Giá">{dataDetailBook?.price}</Descriptions.Item>
                     <Descriptions.Item label="Tồn kho">{dataDetailBook?.stock}</Descriptions.Item>
                     <Descriptions.Item label="Tác giả">{dataDetailBook?.author ? dataDetailBook?.author?.name : "Không có dữ liệu"}</Descriptions.Item>
+                    <Descriptions.Item label="Thumbnail">
+                        <Image
+                            width={200}
+                            src={urlThumbnail}
+                        />
+                    </Descriptions.Item>
+                    <Descriptions.Item label="Images" style={{ width: "300px", }}>
+                        {urlImages.map((url, index) => (
+                            <Image
+                                key={index}
+                                src={url}
+                                width={100}
+                                style={{ marginRight: '10px', marginBottom: '10px', display: "flex",  }}
+                            />
+                        ))}
+                    </Descriptions.Item>
                     <Descriptions.Item label="Ngày tạo">{dayjs(dataDetailBook?.createdAt).format('YYYY-MM-DD')}</Descriptions.Item>
                     <Descriptions.Item label="Ngày cập nhật">{dayjs(dataDetailBook?.updatedAt).format('YYYY-MM-DD')}</Descriptions.Item>
-                </Descriptions>;
+                </Descriptions>
             </Drawer>
         </>
     )

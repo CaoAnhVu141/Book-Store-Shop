@@ -1,11 +1,11 @@
 import { DeleteOutlined, EditOutlined, ImportOutlined, PlusOutlined } from "@ant-design/icons";
 import { ProTable, type ActionType } from "@ant-design/pro-components";
-import { Button, DatePicker, message, Popconfirm } from "antd";
+import { Button, DatePicker, Image, message, Popconfirm } from "antd";
 import { useRef, useState } from "react";
 import dayjs from "dayjs";
-import { fetchBookById, fetchListBook } from "@/services/api";
+import { deleteBook, fetchBookById, fetchListBook } from "@/services/api";
 import DetailBook from "./detail.book";
-import { render } from "sass";
+
 
 const TableBook = () => {
 
@@ -15,7 +15,7 @@ const TableBook = () => {
         pageSize: 5,
         pages: 0,
         total: 0,
-    }); 
+    });
 
     type TSearch = {
         name: string,
@@ -28,6 +28,8 @@ const TableBook = () => {
 
     const [openDetailBook, setOpenDetailBook] = useState<boolean>(false);
     const [dataDetailBook, setDataDetailBook] = useState<IBook | null>(null);
+
+    const urlThumbnail = `${import.meta.env.VITE_BACKEND_URL}/images/book/${dataDetailBook?.thumbnail}`;
 
     const columns: ProColumns<IModelPaginate>[] = [
         {
@@ -55,7 +57,7 @@ const TableBook = () => {
         },
         {
             disable: true,
-            title: 'Danh mục',
+            title: 'Tên',
             dataIndex: 'name',
             filters: true,
             onFilter: true,
@@ -96,6 +98,24 @@ const TableBook = () => {
         },
         {
             disable: true,
+            title: 'Thumbnail',
+            dataIndex: "thumbnail",
+            filters: true,
+            onFilter: true,
+            ellipsis: true,
+            search: true,
+            sorter: true,
+            //     render: (text, record) => {
+            //     const urlThumbnail = `${import.meta.env.VITE_BACKEND_URL}/images/book/${record.thumbnail}`;
+            //     return <img src={urlThumbnail} alt="Thumbnail" style={{ width: 100, height: 100, objectFit: 'cover' }} />;
+            // },
+            render: (text, record) => {
+                const urlThumbnail = `${import.meta.env.VITE_BACKEND_URL}/images/book/${record.thumbnail}`;
+                return <Image width={100} src={urlThumbnail} alt="Thumbnail" preview={true} />
+            }
+        },
+        {
+            disable: true,
             title: 'Ngày tạo',
             dataIndex: 'createdAt',
             filters: true,
@@ -119,10 +139,10 @@ const TableBook = () => {
                     <div className='action-module'>
                         <Popconfirm
                             title="Xoá user"
-                            description="Bạn có muốn xoá user này"
-                            // onConfirm={() => {
-                            //     handleDeleteCategory(record._id);
-                            // }}
+                            description="Bạn có muốn xoá book này"
+                            onConfirm={() => {
+                                handleDelete(record._id);
+                            }}
                             // onCancel={cancel}
                             okText="Xác nhận"
                             cancelText="No"
@@ -130,10 +150,10 @@ const TableBook = () => {
                             <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
                         </Popconfirm>
                         <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }}
-                            // onClick={async () => {
-                            //     const response = await fetchCategoryById(record._id);
-                            //     setDataUpdateCategory(response.data); setOpenUpdateCategory(true)
-                            // }}
+                        // onClick={async () => {
+                        //     const response = await fetchCategoryById(record._id);
+                        //     setDataUpdateCategory(response.data); setOpenUpdateCategory(true)
+                        // }}
                         />
                     </div>
                 </>
@@ -141,6 +161,27 @@ const TableBook = () => {
             filters: true,
         },
     ];
+
+    const refreshTable = () => {
+        actionRef.current?.reload();
+    }
+
+    const handleDelete = async (_id: string) => {
+        const response = await deleteBook(_id);
+        if (response && response.data) {
+            messageApi.open({
+                type: 'success',
+                content: 'Xoá thành công',
+            });
+            refreshTable();
+        }
+        else {
+            messageApi.open({
+                type: 'error',
+                content: response.message,
+            });
+        }
+    }
 
     return (
         <>
@@ -237,10 +278,10 @@ const TableBook = () => {
                 ]}
             />
             <DetailBook
-            openDetailBook={openDetailBook}
-            setOpenDetailBook={setOpenDetailBook}
-            dataDetailBook={dataDetailBook}
-            setDataDetailBook={setDataDetailBook}
+                openDetailBook={openDetailBook}
+                setOpenDetailBook={setOpenDetailBook}
+                dataDetailBook={dataDetailBook}
+                setDataDetailBook={setDataDetailBook}
             />
         </>
     )

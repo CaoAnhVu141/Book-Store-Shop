@@ -139,5 +139,7 @@ declare global {
             _id: string;
             name: string;
         };
+        thumbnail: string;
+        images: string[];
     }
 }
