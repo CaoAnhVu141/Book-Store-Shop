@@ -25,7 +25,7 @@ const DetailBook = (props: IProp) => {
         <>
             <Drawer
                 title="Thông tin sách"
-                width={"50vw"}
+                width={"1000px"}
                 closable={{ 'aria-label': 'Close Button' }}
                 onClose={onClose}
                 open={openDetailBook}
@@ -47,22 +47,21 @@ const DetailBook = (props: IProp) => {
                             src={urlThumbnail}
                         />
                     </Descriptions.Item>
-                    <Descriptions.Item label="Images" style={{ width: "300px", }}>
+                    <Descriptions.Item label="Ngày tạo">{dayjs(dataDetailBook?.createdAt).format('YYYY-MM-DD')}</Descriptions.Item>
+                    <Descriptions.Item label="Ngày cập nhật">{dayjs(dataDetailBook?.updatedAt).format('YYYY-MM-DD')}</Descriptions.Item>
+                    <Descriptions.Item label="Images" style={{ width: "260px", }}>
                         {urlImages.map((url, index) => (
                             <Image
                                 key={index}
                                 src={url}
                                 width={100}
-                                style={{ marginRight: '10px', marginBottom: '10px', display: "flex",  }}
+                                style={{ marginRight: '10px', marginBottom: '10px', display: "flex", gap: "10px"  }}
                             />
                         ))}
                     </Descriptions.Item>
-                    <Descriptions.Item label="Ngày tạo">{dayjs(dataDetailBook?.createdAt).format('YYYY-MM-DD')}</Descriptions.Item>
-                    <Descriptions.Item label="Ngày cập nhật">{dayjs(dataDetailBook?.updatedAt).format('YYYY-MM-DD')}</Descriptions.Item>
                 </Descriptions>
             </Drawer>
         </>
     )
-
 }
 export default DetailBook;

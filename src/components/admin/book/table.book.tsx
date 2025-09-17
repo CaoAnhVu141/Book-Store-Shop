@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 import dayjs from "dayjs";
 import { deleteBook, fetchBookById, fetchListBook } from "@/services/api";
 import DetailBook from "./detail.book";
+import CreateBook from "./create.book";
 
 
 const TableBook = () => {
@@ -28,6 +29,8 @@ const TableBook = () => {
 
     const [openDetailBook, setOpenDetailBook] = useState<boolean>(false);
     const [dataDetailBook, setDataDetailBook] = useState<IBook | null>(null);
+
+    const [OpenCreateBook, setOpenCreateBook] = useState<boolean>(false);
 
     const urlThumbnail = `${import.meta.env.VITE_BACKEND_URL}/images/book/${dataDetailBook?.thumbnail}`;
 
@@ -251,9 +254,9 @@ const TableBook = () => {
                     <Button
                         key="button"
                         icon={<PlusOutlined />}
-                        // onClick={() => {
-                        //     setOpenCreateCategory(true);
-                        // }}
+                        onClick={() => {
+                            setOpenCreateBook(true);
+                        }}
                         type="primary">
                         Thêm mới
                     </Button>,
@@ -282,6 +285,11 @@ const TableBook = () => {
                 setOpenDetailBook={setOpenDetailBook}
                 dataDetailBook={dataDetailBook}
                 setDataDetailBook={setDataDetailBook}
+            />
+            <CreateBook
+            openCreateBook={OpenCreateBook}
+            setOpenCreateBook={setOpenCreateBook}
+            refreshTable={refreshTable}
             />
         </>
     )
