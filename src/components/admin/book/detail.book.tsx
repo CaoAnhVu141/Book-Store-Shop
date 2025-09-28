@@ -1,4 +1,4 @@
-import { Col, Descriptions, Drawer, Image, Row } from "antd";
+import {Descriptions, Drawer, Image } from "antd";
 import dayjs from "dayjs";
 
 interface IProp {

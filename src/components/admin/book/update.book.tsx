@@ -1,15 +1,17 @@
-import { createBook, fetchAllCategory, fetchListAuthor, uploadFileBook } from "@/services/api";
-import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { Form, Input, message, Modal, Upload, Image, type UploadFile, type UploadProps, Select } from "antd";
-import TextArea from "antd/es/input/TextArea";
-import type { FormProps, GetProp } from "antd/lib";
+import { Form, Image, Input, message, Modal, Select, Upload, type GetProp, type UploadFile, type UploadProps } from "antd";
 import { useEffect, useState } from "react";
+import type { FormProps } from "antd/lib";
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import TextArea from "antd/es/input/TextArea";
+import { fetchAllCategory, fetchListAuthor, updateBook, uploadFileBook } from "@/services/api";
 
 interface IProp {
-    openCreateBook: boolean;
-    setOpenCreateBook: (v: boolean) => void;
-    refreshTable: () => void;
+    openUpdateBook: boolean;
+    setOpenUpdateBook: (v: boolean) => void;
+    dataUpdateBook: IBook | null;
+    setDataUpdateBook: (v: IBook | null) => void;
 }
+
 type FieldType = {
     name: string;
     description: string;
@@ -22,12 +24,22 @@ type FieldType = {
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-const CreateBook = (props: IProp) => {
+const UpdateBook = (props: IProp) => {
+    const { openUpdateBook, setOpenUpdateBook, dataUpdateBook, setDataUpdateBook } = props;
 
-    const { openCreateBook, setOpenCreateBook, refreshTable } = props;
-    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
+    const [messageApi, contextHolder] = message.useMessage();
     const [isSubmit, setIsSubmit] = useState<boolean>(false);
+    const [loading, setLoading] = useState(false);
+
+    const [dataCategory, setDataCategory] = useState<IBook[]>([]);
+    const [dataAuthor, setDataAuthor] = useState<IAuthor[]>([]);
+
+    // const urlThumbnail = `${import.meta.env.VITE_BACKEND_URL}/images/book/${dataUpdateBook?.thumbnail}`;
+    // const urlImages = dataUpdateBook?.images.map(images =>
+    //     `${import.meta.env.VITE_BACKEND_URL}/images/book/${images}`
+    // ) || [];
+
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
 
@@ -37,17 +49,49 @@ const CreateBook = (props: IProp) => {
     const [thumbnailFile, setThumbnailFile] = useState<UploadFile | null>(null);
     const [imageFiles, setImageFiles] = useState<UploadFile[]>([]);
 
-    const [dataCategory, setDataCategory] = useState<IBook[]>([]);
-    const [dataAuthor, setDataAuthor] = useState<IAuthor[]>([]);
-    const [loading, setLoading] = useState(false);
-
     //save file name thubnail and images
     const [fileNameThumbnail, setFileThumbnail] = useState<string>('');
     const [fileNameImages, setFileImages] = useState<string[]>([]);
 
 
+    useEffect(() => {
+        if (dataUpdateBook) {
+            form.setFieldsValue({
+                _id: dataUpdateBook._id,
+                name: dataUpdateBook.name,
+                author: dataUpdateBook.author?._id,
+                price: dataUpdateBook.price,
+                category: dataUpdateBook.category,
+                thumbnail: dataUpdateBook.thumbnail,
+                images: dataUpdateBook.images,
+                description: dataUpdateBook.description,
+            });
+            // Set thumbnail preview
+            if (dataUpdateBook.thumbnail) {
+                setThumbnailFile({
+                    uid: '-1',
+                    name: dataUpdateBook.thumbnail,
+                    status: 'done',
+                    url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${dataUpdateBook.thumbnail}`,
+                });
+            }
 
-    // todo with category
+            // Set images preview
+            if (dataUpdateBook.images && dataUpdateBook.images.length > 0) {
+                const listImages = dataUpdateBook.images.map((image, index) => ({
+                    uid: `-${index}`,
+                    name: image,
+                    status: 'done',
+                    url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${image}`,
+                }));
+                setFileImages(listImages);
+            }
+            setFileThumbnail(dataUpdateBook.thumbnail);
+            setFileImages(dataUpdateBook.images);
+
+        }
+    }, [dataUpdateBook]);
+
     useEffect(() => {
         const fetchCategory = async () => {
             const response = await fetchAllCategory('');
@@ -65,13 +109,39 @@ const CreateBook = (props: IProp) => {
         fetchData();
     }, []);
 
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+
+        const { name, description, price, author, category } = values;
+
+        console.log("check athor: ", author);
+
+        const thumbnail = fileNameThumbnail;
+        const images = fileNameImages;
+
+        const formatPrice = parseFloat(price.toString());
+
+        const response = await updateBook(dataUpdateBook?._id, name, description, formatPrice, author, category, thumbnail, images);
+        if (response && response.data) {
+            messageApi.open({
+                type: 'success',
+                content: 'Cập nhật thành công',
+            });
+            form.resetFields();
+            setOpenUpdateBook(false);
+            setDataUpdateBook(null);
+        }
+        else {
+            messageApi.open({
+                type: 'error',
+                content: response.message,
+            });
+            setIsSubmit(false);
+        }
+    }
+
     const handleCanel = () => {
-        setOpenCreateBook(false);
-        setThumbnailFile(null);
-        setImageFiles([]);
-        form.resetFields();
-        setFileThumbnail('');
-        setFileImages([]);
+        setDataUpdateBook(null);
+        setOpenUpdateBook(false);
     }
 
     const handleUploadThumbnail = async ({ file, onSuccess, onError }: any) => {
@@ -189,57 +259,13 @@ const CreateBook = (props: IProp) => {
         </button>
     );
 
-    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-        setIsSubmit(true);
-        const { name, description, price, author, category } = values;
-
-        // Lấy thumbnail và images từ state thay vì từ values nếu cần
-        const thumbnail = fileNameThumbnail;
-        const images = fileNameImages;
-
-        const formatPrice = parseFloat(price.toString());
-
-        if (isNaN(formatPrice) || formatPrice <= 0) {
-            messageApi.open({
-                type: 'error',
-                content: 'Giá không hợp lệ',
-            });
-            setIsSubmit(false);
-            return;
-        }
-
-        try {
-            const response = await createBook(name, description, formatPrice, author, category, thumbnail, images);
-            if (response && response.data) {
-                messageApi.open({
-                    type: 'success',
-                    content: 'Tạo mới thành công',
-                });
-                handleCanel();
-                refreshTable();
-            } else {
-                messageApi.open({
-                    type: 'error',
-                    content: response.message || 'Có lỗi xảy ra',
-                });
-            }
-        } catch (error) {
-            messageApi.open({
-                type: 'error',
-                content: 'Có lỗi xảy ra khi tạo sách',
-            });
-        } finally {
-            setIsSubmit(false);
-        }
-    }
-
     return (
         <>
             {contextHolder}
             <Modal
-                title="Tạo mới sách"
+                title="Cập nhật sách"
                 closable={{ 'aria-label': 'Custom Close Button' }}
-                open={openCreateBook}
+                open={openUpdateBook}
                 width={"800px"}
                 onOk={() => { form.submit() }}
                 onCancel={handleCanel}
@@ -371,5 +397,4 @@ const CreateBook = (props: IProp) => {
         </>
     )
 }
-
-export default CreateBook;
+export default UpdateBook;

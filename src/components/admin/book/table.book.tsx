@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { deleteBook, fetchBookById, fetchListBook } from "@/services/api";
 import DetailBook from "./detail.book";
 import CreateBook from "./create.book";
+import UpdateBook from "./update.book";
 
 
 const TableBook = () => {
@@ -33,6 +34,10 @@ const TableBook = () => {
     const [OpenCreateBook, setOpenCreateBook] = useState<boolean>(false);
 
     const urlThumbnail = `${import.meta.env.VITE_BACKEND_URL}/images/book/${dataDetailBook?.thumbnail}`;
+
+    // update book
+    const [openUpdateBook, setOpenUpdateBook] = useState<boolean>(false);
+    const [dataUpdateBook, setDataUpdateBook] = useState<IBook[] | null>([]);
 
     const columns: ProColumns<IModelPaginate>[] = [
         {
@@ -153,10 +158,10 @@ const TableBook = () => {
                             <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
                         </Popconfirm>
                         <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }}
-                        // onClick={async () => {
-                        //     const response = await fetchCategoryById(record._id);
-                        //     setDataUpdateCategory(response.data); setOpenUpdateCategory(true)
-                        // }}
+                        onClick={async () => {
+                            const response = await fetchBookById(record._id);
+                            setDataUpdateBook(response.data); setOpenUpdateBook(true);
+                        }}
                         />
                     </div>
                 </>
@@ -287,9 +292,15 @@ const TableBook = () => {
                 setDataDetailBook={setDataDetailBook}
             />
             <CreateBook
-            openCreateBook={OpenCreateBook}
-            setOpenCreateBook={setOpenCreateBook}
-            refreshTable={refreshTable}
+                openCreateBook={OpenCreateBook}
+                setOpenCreateBook={setOpenCreateBook}
+                refreshTable={refreshTable}
+            />
+            <UpdateBook
+            openUpdateBook={openUpdateBook}
+            setOpenUpdateBook={setOpenUpdateBook}
+            dataUpdateBook={dataUpdateBook}
+            setDataUpdateBook={setDataUpdateBook}
             />
         </>
     )

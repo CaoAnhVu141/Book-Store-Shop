@@ -134,7 +134,10 @@ declare global {
         name: string,
         description: string;
         price: number;
-        stock: number;
+        category: {
+            _id: string;
+            name: string;
+        };
         author: {
             _id: string;
             name: string;

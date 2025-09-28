@@ -247,20 +247,14 @@ export const createBook = (name: string, description: string, price: number, aut
     return axios.post<IBackendRes<IBook>>(urlBackend, data);
 }
 
+export const updateBook = (_id: string, name: string, description: string, price: number, author: string, category: string, thumbnail: string, images: string[]) => {
+    const urlBackend = `api/v1/books/${_id}`;
+    const data = {
+        name: name, description: description, price: price, author: author, category: category, thumbnail: thumbnail, images: images,
+    }
+    return axios.patch<IBackendRes<IBook>>(urlBackend, data);
+}
 
-// export const uploadFileBook = (fileUpload) => {
-//     const bodyFormData = new FormData();
-//     bodyFormData.append('fileUpload', fileUpload);
-//     return axios({
-//         method: 'post',
-//         url: '/api/v1/files/upload',
-//         data: bodyFormData,
-//         headers: {
-//             "Content-Type": "multipart/form-data",
-//             "upload-type": "book"
-//         },
-//     });
-// }
 export const uploadFileBook = (fileUpload) => {
     const bodyFormData = new FormData();
     bodyFormData.append('fileUpload', fileUpload);
