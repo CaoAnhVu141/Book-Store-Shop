@@ -10,6 +10,7 @@ interface IProp {
     setOpenUpdateBook: (v: boolean) => void;
     dataUpdateBook: IBook | null;
     setDataUpdateBook: (v: IBook | null) => void;
+    refreshTable: () => void;
 }
 
 type FieldType = {
@@ -25,7 +26,7 @@ type FieldType = {
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 const UpdateBook = (props: IProp) => {
-    const { openUpdateBook, setOpenUpdateBook, dataUpdateBook, setDataUpdateBook } = props;
+    const { openUpdateBook, setOpenUpdateBook, dataUpdateBook, setDataUpdateBook,refreshTable } = props;
 
     const [form] = Form.useForm();
     const [messageApi, contextHolder] = message.useMessage();
@@ -34,11 +35,6 @@ const UpdateBook = (props: IProp) => {
 
     const [dataCategory, setDataCategory] = useState<IBook[]>([]);
     const [dataAuthor, setDataAuthor] = useState<IAuthor[]>([]);
-
-    // const urlThumbnail = `${import.meta.env.VITE_BACKEND_URL}/images/book/${dataUpdateBook?.thumbnail}`;
-    // const urlImages = dataUpdateBook?.images.map(images =>
-    //     `${import.meta.env.VITE_BACKEND_URL}/images/book/${images}`
-    // ) || [];
 
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
@@ -74,6 +70,7 @@ const UpdateBook = (props: IProp) => {
                     status: 'done',
                     url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${dataUpdateBook.thumbnail}`,
                 });
+                setFileThumbnail(dataUpdateBook.thumbnail);
             }
 
             // Set images preview
@@ -84,11 +81,10 @@ const UpdateBook = (props: IProp) => {
                     status: 'done',
                     url: `${import.meta.env.VITE_BACKEND_URL}/images/book/${image}`,
                 }));
-                setFileImages(listImages);
+                ///comment note
+                setFileImages(dataUpdateBook.images);
+                setImageFiles(listImages);
             }
-            setFileThumbnail(dataUpdateBook.thumbnail);
-            setFileImages(dataUpdateBook.images);
-
         }
     }, [dataUpdateBook]);
 
@@ -113,8 +109,6 @@ const UpdateBook = (props: IProp) => {
 
         const { name, description, price, author, category } = values;
 
-        console.log("check athor: ", author);
-
         const thumbnail = fileNameThumbnail;
         const images = fileNameImages;
 
@@ -129,6 +123,7 @@ const UpdateBook = (props: IProp) => {
             form.resetFields();
             setOpenUpdateBook(false);
             setDataUpdateBook(null);
+            refreshTable();
         }
         else {
             messageApi.open({
@@ -149,13 +144,12 @@ const UpdateBook = (props: IProp) => {
         try {
             const response = await uploadFileBook(file);
             if (response && response.data) {
-                // Giả sử API trả về fileName trong response.data
                 const fileName = response.data.fileName || response.data.name;
                 setFileThumbnail(fileName);
                 getBase64(file, (url: string) => {
                     setThumbnailFile({
                         uid: file.uid,
-                        name: file.name,
+                        name: fileName,
                         status: 'done',
                         url: url,
                         thumbUrl: url

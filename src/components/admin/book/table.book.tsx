@@ -301,6 +301,7 @@ const TableBook = () => {
             setOpenUpdateBook={setOpenUpdateBook}
             dataUpdateBook={dataUpdateBook}
             setDataUpdateBook={setDataUpdateBook}
+            refreshTable={refreshTable}
             />
         </>
     )
