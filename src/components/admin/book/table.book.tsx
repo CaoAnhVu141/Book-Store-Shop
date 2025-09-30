@@ -22,6 +22,7 @@ const TableBook = () => {
     type TSearch = {
         name: string,
         description: string,
+        author: string,
         startDate: string,
         endDate: string,
     };
@@ -87,22 +88,22 @@ const TableBook = () => {
             disable: true,
             title: 'Giá',
             dataIndex: 'price',
-            filters: true,
             onFilter: true,
             ellipsis: true,
-            search: true,
             sorter: true,
+            hideInSearch: true,
         },
         {
             disable: true,
             title: 'Tác giả',
-            // dataIndex: 'author',
             dataIndex: ['author', 'name'],
             filters: true,
             onFilter: true,
             ellipsis: true,
-            search: true,
             sorter: true,
+            search: {
+                transform: (value) => ({ author: value })
+            },
         },
         {
             disable: true,
@@ -158,10 +159,10 @@ const TableBook = () => {
                             <DeleteOutlined style={{ cursor: 'pointer', color: '#f00505' }} />
                         </Popconfirm>
                         <EditOutlined style={{ cursor: 'pointer', color: '#f2df07' }}
-                        onClick={async () => {
-                            const response = await fetchBookById(record._id);
-                            setDataUpdateBook(response.data); setOpenUpdateBook(true);
-                        }}
+                            onClick={async () => {
+                                const response = await fetchBookById(record._id);
+                                setDataUpdateBook(response.data); setOpenUpdateBook(true);
+                            }}
                         />
                     </div>
                 </>
@@ -202,6 +203,16 @@ const TableBook = () => {
                     let query = "";
                     if (params) {
                         query += `current=${params.current}&pageSize=${params.pageSize}`
+                    }
+                    if (params?.name) {
+                        query += `&name=${params.name}`;
+                    }
+                    if (params?.description) {
+                        query += `&description=${params.description}`;
+                    }
+                    if (params?.author) {
+                        query += `&author=${params.author}`;
+                        console.log(query);
                     }
                     // if (params?.name) {
                     //     query += `&name=${params.name}`;
@@ -297,11 +308,11 @@ const TableBook = () => {
                 refreshTable={refreshTable}
             />
             <UpdateBook
-            openUpdateBook={openUpdateBook}
-            setOpenUpdateBook={setOpenUpdateBook}
-            dataUpdateBook={dataUpdateBook}
-            setDataUpdateBook={setDataUpdateBook}
-            refreshTable={refreshTable}
+                openUpdateBook={openUpdateBook}
+                setOpenUpdateBook={setOpenUpdateBook}
+                dataUpdateBook={dataUpdateBook}
+                setDataUpdateBook={setDataUpdateBook}
+                refreshTable={refreshTable}
             />
         </>
     )
