@@ -6,6 +6,9 @@ import AppHeader from './components/layout/app.header'
 import { fetchAccountAPI } from './services/api'
 import { useCurrentApp } from './components/context/app.context'
 import { ScaleLoader } from 'react-spinners'
+import NavBarCategory from './components/layout/navbar'
+import MainAuthor from './components/layout/main-author'
+
 
 function Layout() {
 
@@ -54,6 +57,12 @@ function Layout() {
   return (
     <>
       <AppHeader />
+      <div className="main-container">
+        <NavBarCategory />
+        <div className='main-content'>
+          <MainAuthor />
+        </div>
+      </div>
       <Outlet />
     </>
   )
