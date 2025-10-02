@@ -2,12 +2,31 @@
     margin: 0;
 }
 
+body {
+    background-color: #f7f7f7;
+}
+
 .main-container{
     display: flex;
     gap: 20px;
     padding: 20px;
+    
 }
 .main-content{
-    flex-direction: column;
+
     display: flex;
+    flex: 1;
+}
+
+.left-side{
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 20px;
+    padding-right: 16px;
+}
+
+.center-side{
+    margin-top: 20px;
+    margin-left: 16px;
 }

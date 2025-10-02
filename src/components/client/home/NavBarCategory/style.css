@@ -5,7 +5,7 @@
     border-radius: 10px;
     margin-top: 20px;
     margin-left: 50px;
-    background-color: #f7f7f7;
+    background-color: white;
 }
 .category ul{
     list-style-type: none;
@@ -18,14 +18,22 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    padding-top: 10px;
 }
 
 .item-category{
     height: 100%;   
-    padding: 10px 10px 10px 30px;
+    padding: 7px 12px;
+    border-radius: 10px; 
+    margin: 0 6px;
+    height: 40px;
+    display: flex;
+    align-items: center;
 }
 
 .item-category:hover{
     cursor: pointer;
-    background-color: white;
+    background-color: rgb(193, 192, 192);
 }

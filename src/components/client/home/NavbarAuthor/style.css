@@ -1,0 +1,41 @@
+.main__author{
+    height: 100%;
+    width: 300px;
+    color: black;
+    background-color: white;
+    background-color: white;
+    margin-top: 20px;
+    margin-left: 50px;
+    border-radius: 10px;
+}
+.main__author-title{
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+
+.main__author ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.main__author-item{
+    display: flex;
+    padding: 7px 12px;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 10px;
+    margin: 0 6px;
+    height: 40px;
+    border-radius: 10px;
+}
+
+.main__author-item:hover{
+    background-color: rgb(193, 192, 192);
+    cursor: pointer;
+
+}

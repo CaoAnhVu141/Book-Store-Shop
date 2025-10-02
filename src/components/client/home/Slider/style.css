@@ -1,0 +1,23 @@
+.slider-containter{
+    background-color: white;
+    border-radius: 10px;
+    height: 300px;
+    width: 1050px;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-around;
+    padding: 16px;
+
+}
+.slider-image{
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.slider-image img{
+    max-width: 100%;
+    border-style: none;
+    max-height: 100%;
+    object-fit: cover;
+}
