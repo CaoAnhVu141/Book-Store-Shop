@@ -1,3 +1,4 @@
+import BestSeller from "@/components/client/home/BestSeller/bestseller";
 import AuthorNavbar from "@/components/client/home/NavbarAuthor/author.navbar";
 import CategorySidebar from "@/components/client/home/NavBarCategory/category.index";
 import SliderImage from "@/components/client/home/Slider/slider";
@@ -19,6 +20,7 @@ const HomePage = () => {
                 </div> */}
                 <div className="center-side">
                     <SliderImage/>
+                    <BestSeller/>
                 </div>
             </div>
         </div>
